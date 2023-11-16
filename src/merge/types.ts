@@ -8,18 +8,22 @@ export type MergeStrategy = <A, B, Result>(
   key: keyof any
 ) => Result;
 
+export type MergeType = "replace" | "keep";
+
 export type MergeOptions = {
-  array?: "replace" | "concat" | MergeStrategy;
-  boolean?: "replace" | "and" | "or" | MergeStrategy;
+  array?: MergeType | "concat" | MergeStrategy;
+  boolean?: MergeType | "and" | "or" | MergeStrategy;
   custom?: {
     key?: keyof any | MergeKeyMatch;
     value?: any | MergeValueMatch;
     strategy?: MergeStrategy;
   }[];
-  function?: "replace" | "concat" | MergeStrategy;
-  null?: "replace" | "omit" | MergeStrategy;
-  number?: "replace" | "add" | MergeStrategy;
-  object?: "replace" | "concat" | MergeStrategy;
+  deep?: boolean;
+  function?: MergeType | "concat" | MergeStrategy;
+  mismatch?: MergeType | MergeStrategy;
+  null?: MergeType | MergeStrategy;
+  number?: MergeType | "add" | "subtract" | MergeStrategy;
+  object?: MergeType | "concat" | MergeStrategy;
   omit?: {
     key?: (keyof any | MergeKeyMatch)[];
     value?: (any | MergeValueMatch)[];
@@ -28,9 +32,9 @@ export type MergeOptions = {
     key?: (keyof any | MergeKeyMatch)[];
     value?: (any | MergeValueMatch)[];
   };
-  string?: "replace" | "concat" | MergeStrategy;
-  symbol?: "replace" | MergeStrategy;
-  undefined?: "replace" | "omit" | MergeStrategy;
+  string?: MergeType | "concat" | MergeStrategy;
+  symbol?: MergeType | MergeStrategy;
+  undefined?: MergeType | MergeStrategy;
 };
 
 export type MergeResult<Objects extends any[]> = Objects extends [
@@ -41,3 +45,10 @@ export type MergeResult<Objects extends any[]> = Objects extends [
     ? Head & MergeResult<Tail>
     : never
   : {};
+
+export type ResolveMergeStrategy<Strategy extends keyof MergeOptions> = (
+  strategy: MergeOptions[Strategy],
+  a: any,
+  b: any,
+  key: keyof any
+) => any;

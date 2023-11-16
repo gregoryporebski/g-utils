@@ -1,3 +1,4 @@
+import { resolveMerge } from "./resolvers/resolveMerge";
 import type { MergeOptions, MergeResult } from "./types";
 
 export function mergeWithFactory(options: MergeOptions) {
@@ -9,11 +10,20 @@ export function mergeWith<Objects extends any[]>(
   options: MergeOptions,
   ...objects: Objects
 ): MergeResult<Objects> {
-  return objects.reduce((result, object) => {
-    Object.keys(object).forEach((key) => {
-      const value = object[key];
+  return objects.reduce((a, b) => {
+    Object.keys(b).forEach((key) => {
+      const input = [a, b, key] as const;
+
+      if (
+        [undefined, null].includes(b[key]) ||
+        ["undefined", "symbol"].includes(typeof b[key]) ||
+        typeof a[key] !== typeof b[key]
+      ) {
+        a[key] = resolveMerge(options.undefined, ...input);
+        return;
+      }
     });
 
-    return result;
+    return a;
   }, {} as MergeResult<Objects>);
 }
