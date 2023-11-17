@@ -1,24 +1,17 @@
-import { mergeWith } from "./src/merge";
+import { merge } from "./src/merge";
 
 const a = {
-  lorem: "ipsum",
-  dolor: 2,
-  sit: { a: 1, b: [1, 2, 3], c: () => console.log("c") },
+  a: [1, 2],
 };
 
 const b = {
-  lorem: "dolor",
-  dolor: 5,
-  sit: { a: 2, b: ["a", "b", "c"], c: () => console.log("d") },
+  a: [3, 4],
 };
 
-const result = mergeWith(
-  {
-    custom: [{ selector: (key, value) => key === "lorem", strategy: "concat" }],
-    deep: true,
-  },
-  a,
-  b
-);
+const c = {
+  a: [5, 6],
+};
+
+const result = merge(a, b, c);
 
 console.log(result);

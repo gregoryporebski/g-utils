@@ -1,4 +1,4 @@
-import { isArray, isObject } from "typesafe-utils";
+import { isArray, isObject, isPrimitiveObject } from "typesafe-utils";
 import mergeWith from "../mergeWith";
 import type { MergeOptions, MergeStrategy } from "../types";
 import mergeResolverFactory from "./mergeResolver";
@@ -9,7 +9,7 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
     const resolver = (options.resolver ?? mergeResolverFactory)(a, b, key);
     const selector = (options.selector ?? mergeSelectorFactory)(key, b[key]);
 
-    const isDeepSelector = options.deep && !isArray(b[key]) && isObject(b[key]);
+    const isDeepSelector = options.deep && isPrimitiveObject(b[key]);
 
     if (options.pick && !selector(options.pick) && !isDeepSelector) {
       return;
@@ -46,7 +46,7 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
     }
 
     if (isArray(b[key])) {
-      a[key] = resolver(options.array);
+      a[key] = resolver(options.array ?? "concat");
       return;
     }
 
@@ -56,7 +56,7 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
         return;
       }
 
-      a[key] = resolver(options.object);
+      a[key] = resolver(options.object ?? "concat");
       return;
     }
 

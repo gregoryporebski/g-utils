@@ -1,4 +1,4 @@
-import { isObject, isUndefined } from "typesafe-utils";
+import { isPrimitiveObject, isUndefined } from "typesafe-utils";
 import { concatFunctions } from "../resolvers/concatFunctions";
 import { concatObjects } from "../resolvers/concatObjects";
 import { MergeResolverFactory } from "../types";
@@ -26,7 +26,7 @@ const mergeResolverFactory: MergeResolverFactory =
         return concatFunctions(a[key], b[key]);
       }
 
-      if (isObject(a[key]) && isObject(b[key])) {
+      if (isPrimitiveObject(a[key]) && isPrimitiveObject(b[key])) {
         return concatObjects(a[key], b[key]);
       }
 
