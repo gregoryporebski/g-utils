@@ -58,6 +58,6 @@ export type MergeResult<Objects extends any[]> = Objects extends [
   ...infer Tail,
 ]
   ? Head extends {}
-    ? Head & MergeResult<Tail>
+    ? Head | MergeResult<Tail>
     : never
   : {};
