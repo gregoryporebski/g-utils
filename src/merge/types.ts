@@ -2,28 +2,40 @@ export type MergeKeyMatch = (key: keyof any) => boolean;
 
 export type MergeValueMatch = (value: any) => boolean;
 
-export type MergeStrategy = <A, B, Result>(
+export type MergeStrategyFunction = <A, B, Result>(
   a: A,
   b: B,
   key: keyof any
 ) => Result;
 
-export type MergeType = "replace" | "keep";
+export type CommonMergeStrategy = "replace" | "keep";
+
+export type MergeStrategy = Exclude<
+  {
+    [K in keyof MergeOptions]: MergeOptions[K] extends
+      | string
+      | MergeStrategyFunction
+      | undefined
+      ? MergeOptions[K]
+      : never;
+  }[keyof MergeOptions],
+  undefined
+>;
 
 export type MergeOptions = {
-  array?: MergeType | "concat" | MergeStrategy;
-  boolean?: MergeType | "and" | "or" | MergeStrategy;
+  array?: CommonMergeStrategy | "concat" | MergeStrategyFunction;
+  boolean?: CommonMergeStrategy | "and" | "or" | MergeStrategyFunction;
   custom?: {
     key?: keyof any | MergeKeyMatch;
     value?: any | MergeValueMatch;
-    strategy?: MergeStrategy;
+    strategy?: MergeStrategyFunction;
   }[];
   deep?: boolean;
-  function?: MergeType | "concat" | MergeStrategy;
-  mismatch?: MergeType | MergeStrategy;
-  null?: MergeType | MergeStrategy;
-  number?: MergeType | "add" | "subtract" | MergeStrategy;
-  object?: MergeType | "concat" | MergeStrategy;
+  function?: CommonMergeStrategy | "concat" | MergeStrategyFunction;
+  mismatch?: CommonMergeStrategy | MergeStrategyFunction;
+  null?: CommonMergeStrategy | MergeStrategyFunction;
+  number?: CommonMergeStrategy | "add" | "subtract" | MergeStrategyFunction;
+  object?: CommonMergeStrategy | "concat" | MergeStrategyFunction;
   omit?: {
     key?: (keyof any | MergeKeyMatch)[];
     value?: (any | MergeValueMatch)[];
@@ -32,23 +44,22 @@ export type MergeOptions = {
     key?: (keyof any | MergeKeyMatch)[];
     value?: (any | MergeValueMatch)[];
   };
-  string?: MergeType | "concat" | MergeStrategy;
-  symbol?: MergeType | MergeStrategy;
-  undefined?: MergeType | MergeStrategy;
+  string?: CommonMergeStrategy | "concat" | MergeStrategyFunction;
+  symbol?: CommonMergeStrategy | MergeStrategyFunction;
+  undefined?: CommonMergeStrategy | MergeStrategyFunction;
 };
 
 export type MergeResult<Objects extends any[]> = Objects extends [
   infer Head,
-  ...infer Tail
+  ...infer Tail,
 ]
   ? Head extends {}
     ? Head & MergeResult<Tail>
     : never
   : {};
 
-export type ResolveMergeStrategy<Strategy extends keyof MergeOptions> = (
-  strategy: MergeOptions[Strategy],
+export type MergeResolverFactory = (
   a: any,
   b: any,
   key: keyof any
-) => any;
+) => (strategy?: MergeStrategy) => any;
