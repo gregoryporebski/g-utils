@@ -1,7 +1,3 @@
-export type MergeKeyMatch = (key: keyof any) => boolean;
-
-export type MergeValueMatch = (value: any) => boolean;
-
 export type MergeCommonStrategy = "replace" | "keep";
 
 export type MergeStrategyFunction = (a: any, b: any, key: keyof any) => any;

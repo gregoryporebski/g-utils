@@ -1,4 +1,19 @@
-export { merge } from "./merge";
+export { merge, mergeDeep } from "./merge";
 export { mergeResolverFactory } from "./mergeResolver";
-export { mergeWith, mergeWithFactory } from "./mergeWith";
-export type { MergeOptions as MergeConfig, MergeResult } from "./types";
+export { mergeSelectorFactory } from "./mergeSelector";
+export {
+  mergeDeepWith,
+  mergeDeepWithFactory,
+  mergeWith,
+  mergeWithFactory,
+} from "./mergeWith";
+export type {
+  MergeCustomStrategy,
+  MergeOptions,
+  MergeResolverFactory,
+  MergeResult,
+  MergeSelector,
+  MergeSelectorFactory,
+  MergeStrategy,
+  MergeStrategyFunction,
+} from "./types";
