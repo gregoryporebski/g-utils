@@ -2,7 +2,7 @@ export type MergeKeyMatch = (key: keyof any) => boolean;
 
 export type MergeValueMatch = (value: any) => boolean;
 
-export type CommonMergeStrategy = "replace" | "keep";
+export type MergeCommonStrategy = "replace" | "keep";
 
 export type MergeStrategyFunction = <A, B, Result>(
   a: A,
@@ -41,20 +41,21 @@ export type MergeResolverFactory = (
 ) => (strategy?: MergeStrategy) => any;
 
 export type MergeOptions = {
-  array?: CommonMergeStrategy | "concat" | MergeStrategyFunction;
-  boolean?: CommonMergeStrategy | "and" | "or" | MergeStrategyFunction;
+  array?: MergeCommonStrategy | "concat" | MergeStrategyFunction;
+  boolean?: MergeCommonStrategy | "and" | "or" | MergeStrategyFunction;
   custom?: MergeCustomResolver[];
   deep?: boolean;
-  function?: CommonMergeStrategy | "concat" | MergeStrategyFunction;
-  mismatch?: CommonMergeStrategy | MergeStrategyFunction;
-  null?: CommonMergeStrategy | MergeStrategyFunction;
-  number?: CommonMergeStrategy | "add" | "subtract" | MergeStrategyFunction;
-  object?: CommonMergeStrategy | "concat" | MergeStrategyFunction;
+  function?: MergeCommonStrategy | "concat" | MergeStrategyFunction;
+  mismatch?: MergeCommonStrategy | MergeStrategyFunction;
+  null?: MergeCommonStrategy | MergeStrategyFunction;
+  number?: MergeCommonStrategy | "add" | "subtract" | MergeStrategyFunction;
+  object?: MergeCommonStrategy | "concat" | MergeStrategyFunction;
   omit?: MergeSelector[];
   pick?: MergeSelector[];
-  string?: CommonMergeStrategy | "concat" | MergeStrategyFunction;
-  symbol?: CommonMergeStrategy | MergeStrategyFunction;
-  undefined?: CommonMergeStrategy | MergeStrategyFunction;
+  resolver?: MergeResolverFactory;
+  string?: MergeCommonStrategy | "concat" | MergeStrategyFunction;
+  symbol?: MergeCommonStrategy | MergeStrategyFunction;
+  undefined?: MergeCommonStrategy | MergeStrategyFunction;
 };
 
 export type MergeResult<Objects extends any[]> = Objects extends [
