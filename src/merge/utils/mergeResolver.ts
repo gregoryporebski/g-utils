@@ -1,9 +1,9 @@
 import { isObject, isUndefined } from "typesafe-utils";
-import { concatFunctions } from "./resolvers/concatFunctions";
-import { concatObjects } from "./resolvers/concatObjects";
-import { MergeResolverFactory } from "./types";
+import { concatFunctions } from "../resolvers/concatFunctions";
+import { concatObjects } from "../resolvers/concatObjects";
+import { MergeResolverFactory } from "../types";
 
-export const mergeResolverFactory: MergeResolverFactory =
+const mergeResolverFactory: MergeResolverFactory =
   (a, b, key) => (strategy) => {
     if (strategy === "replace" || isUndefined(strategy)) {
       return b[key];
@@ -45,3 +45,5 @@ export const mergeResolverFactory: MergeResolverFactory =
       return strategy(a[key], b[key], key);
     }
   };
+
+export default mergeResolverFactory;

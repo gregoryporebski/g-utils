@@ -1,8 +1,8 @@
 import { isObject } from "typesafe-utils";
-import { mergeObjects } from "./mergeObjects";
 import type { MergeOptions, MergeResult } from "./types";
+import mergeObjects from "./utils/mergeObjects";
 
-export function mergeWith<Objects extends any[]>(
+export default function mergeWith<Objects extends any[]>(
   options: MergeOptions,
   ...objects: Objects
 ): MergeResult<Objects> {
@@ -21,21 +21,4 @@ export function mergeWith<Objects extends any[]>(
 
     return a;
   }, {} as MergeResult<Objects>);
-}
-
-export function mergeDeepWith<Objects extends any[]>(
-  options: MergeOptions,
-  ...objects: Objects
-): MergeResult<Objects> {
-  return mergeWith({ ...options, deep: true }, ...objects);
-}
-
-export function mergeWithFactory(options: MergeOptions) {
-  return <Objects extends any[]>(...objects: Objects) =>
-    mergeWith(options, ...objects);
-}
-
-export function mergeDeepWithFactory(options: MergeOptions) {
-  return <Objects extends any[]>(...objects: Objects) =>
-    mergeDeepWith(options, ...objects);
 }

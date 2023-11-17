@@ -1,8 +1,8 @@
 import mergeWith from "./mergeWith";
 import type { MergeResult } from "./types";
 
-export default function merge<Objects extends any[]>(
+export default function mergeDeep<Objects extends any[]>(
   ...objects: Objects
 ): MergeResult<Objects> {
-  return mergeWith({}, ...objects);
+  return mergeWith({ deep: true }, ...objects);
 }
