@@ -14,11 +14,11 @@ export const mergeResolverFactory: MergeResolverFactory =
     }
 
     if (strategy === "add") {
-      return a[key] + b[key];
+      return Object.hasOwn(a, key) ? a[key] + b[key] : b[key];
     }
 
     if (strategy === "subtract") {
-      return a[key] - b[key];
+      return Object.hasOwn(a, key) ? a[key] - b[key] : b[key];
     }
 
     if (strategy === "concat") {
@@ -30,11 +30,11 @@ export const mergeResolverFactory: MergeResolverFactory =
         return concatObjects(a[key], b[key]);
       }
 
-      return a[key].concat(b[key]);
+      return a?.[key]?.concat(b[key]) ?? b[key];
     }
 
     if (strategy === "and") {
-      return a[key] && b[key];
+      return Object.hasOwn(a, key) ? a[key] && b[key] : b[key];
     }
 
     if (strategy === "or") {
@@ -42,6 +42,6 @@ export const mergeResolverFactory: MergeResolverFactory =
     }
 
     if (typeof strategy === "function") {
-      return strategy(a, b, key);
+      return strategy(a[key], b[key], key);
     }
   };

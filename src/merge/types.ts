@@ -4,33 +4,26 @@ export type MergeValueMatch = (value: any) => boolean;
 
 export type MergeCommonStrategy = "replace" | "keep";
 
-export type MergeStrategyFunction = <A, B, Result>(
-  a: A,
-  b: B,
-  key: keyof any
-) => Result;
+export type MergeStrategyFunction = (a: any, b: any, key: keyof any) => any;
 
-export type MergeStrategy = Exclude<
-  {
-    [K in keyof MergeOptions]: MergeOptions[K] extends
-      | string
-      | MergeStrategyFunction
-      | undefined
-      ? MergeOptions[K]
-      : never;
-  }[keyof MergeOptions],
-  undefined
->;
+export type MergeStrategy =
+  | Exclude<
+      {
+        [K in keyof MergeOptions]: MergeOptions[K] extends
+          | string
+          | MergeStrategyFunction
+          | undefined
+          ? MergeOptions[K]
+          : never;
+      }[keyof MergeOptions],
+      undefined | MergeResolverFactory | MergeSelectorFactory
+    >
+  | MergeStrategyFunction;
 
-export type MergeSelector =
-  | { key: keyof any | MergeKeyMatch }
-  | { value: any | MergeValueMatch }
-  | {
-      key: keyof any | MergeKeyMatch;
-      value: any | MergeValueMatch;
-    };
+export type MergeSelector = (key: keyof any, value: any) => boolean;
 
-export type MergeCustomResolver = MergeSelector & {
+export type MergeCustomStrategy = {
+  selector: MergeSelector;
   strategy: MergeStrategy;
 };
 
@@ -40,10 +33,15 @@ export type MergeResolverFactory = (
   key: keyof any
 ) => (strategy?: MergeStrategy) => any;
 
+export type MergeSelectorFactory = (
+  key: keyof any,
+  value: any
+) => (selectors: MergeSelector[]) => boolean;
+
 export type MergeOptions = {
   array?: MergeCommonStrategy | "concat" | MergeStrategyFunction;
   boolean?: MergeCommonStrategy | "and" | "or" | MergeStrategyFunction;
-  custom?: MergeCustomResolver[];
+  custom?: MergeCustomStrategy[];
   deep?: boolean;
   function?: MergeCommonStrategy | "concat" | MergeStrategyFunction;
   mismatch?: MergeCommonStrategy | MergeStrategyFunction;
@@ -53,6 +51,7 @@ export type MergeOptions = {
   omit?: MergeSelector[];
   pick?: MergeSelector[];
   resolver?: MergeResolverFactory;
+  selector?: MergeSelectorFactory;
   string?: MergeCommonStrategy | "concat" | MergeStrategyFunction;
   symbol?: MergeCommonStrategy | MergeStrategyFunction;
   undefined?: MergeCommonStrategy | MergeStrategyFunction;
