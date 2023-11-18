@@ -24,6 +24,9 @@
   "files": [
     "/lib"
   ],
+  "publishConfig": {
+    "@gregoryporebski:registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "build": "bun build.ts && tsc -p tsconfig.dts.json"
   },
