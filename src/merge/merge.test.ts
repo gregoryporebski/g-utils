@@ -204,4 +204,39 @@ describe("merge", () => {
     expect(merge(obj1, obj2)).toEqual({ a: obj2.a });
     expect(merge(obj2, obj1)).toEqual({ a: obj1.a });
   });
+
+  test("should handle merging objects with Buffer properties", () => {
+    const obj1 = { a: Buffer.from("value1") };
+    const obj2 = { a: Buffer.from("value2") };
+    expect(merge(obj1, obj2)).toEqual({ a: obj2.a });
+    expect(merge(obj2, obj1)).toEqual({ a: obj1.a });
+  });
+
+  test("should handle merging objects with ArrayBuffer properties", () => {
+    const obj1 = { a: new ArrayBuffer(8) };
+    const obj2 = { a: new ArrayBuffer(8) };
+    expect(merge(obj1, obj2)).toEqual({ a: obj2.a });
+    expect(merge(obj2, obj1)).toEqual({ a: obj1.a });
+  });
+
+  test("should handle merging objects with NaN properties", () => {
+    const obj1 = { a: NaN };
+    const obj2 = { a: NaN };
+    expect(merge(obj1, obj2)).toEqual({ a: NaN });
+    expect(merge(obj2, obj1)).toEqual({ a: NaN });
+  });
+
+  test("should handle merging objects with Infinity properties", () => {
+    const obj1 = { a: Infinity };
+    const obj2 = { a: Infinity };
+    expect(merge(obj1, obj2)).toEqual({ a: Infinity });
+    expect(merge(obj2, obj1)).toEqual({ a: Infinity });
+  });
+
+  test("should handle merging objects with -Infinity properties", () => {
+    const obj1 = { a: -Infinity };
+    const obj2 = { a: -Infinity };
+    expect(merge(obj1, obj2)).toEqual({ a: -Infinity });
+    expect(merge(obj2, obj1)).toEqual({ a: -Infinity });
+  });
 });
