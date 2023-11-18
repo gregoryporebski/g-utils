@@ -1,4 +1,4 @@
-import { isArray, isObject, isPrimitiveObject } from "typesafe-utils";
+import { isArray, isObject } from "typesafe-utils";
 import mergeWith from "../mergeWith";
 import type { MergeOptions, MergeStrategy } from "../types";
 import mergeResolverFactory from "./mergeResolver";
@@ -9,7 +9,7 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
     const resolver = (options.resolver ?? mergeResolverFactory)(a, b, key);
     const selector = (options.selector ?? mergeSelectorFactory)(key, b[key]);
 
-    const isDeepSelector = options.deep && isPrimitiveObject(b[key]);
+    const isDeepSelector = options.deep && isObject(b[key]) && !isArray(b[key]);
 
     if (options.pick && !selector(options.pick) && !isDeepSelector) {
       return;
@@ -61,14 +61,20 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
     }
 
     if (
-      ["function", "string", "number", "boolean", "symbol"].includes(
+      ["function", "string", "number", "bigint", "boolean", "symbol"].includes(
         typeof b[key]
       )
     ) {
-      a[key] = resolver(options[typeof b[key] as keyof MergeStrategy]);
+      const dictionary: Record<string, string> = {
+        bigint: "number",
+      };
+
+      const mappedKey = dictionary[typeof b[key]] ?? typeof b[key];
+
+      a[key] = resolver(options[mappedKey as keyof MergeStrategy]);
       return;
     }
 
-    console.error("Unhandled entity", { key, value: b[key] });
+    options.debug && console.error("Unhandled entity", { key, value: b[key] });
   });
 }

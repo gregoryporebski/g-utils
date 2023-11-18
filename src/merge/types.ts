@@ -38,6 +38,7 @@ export type MergeOptions = {
   array?: MergeCommonStrategy | "concat" | MergeStrategyFunction;
   boolean?: MergeCommonStrategy | "and" | "or" | MergeStrategyFunction;
   custom?: MergeCustomStrategy[];
+  debug?: boolean;
   deep?: boolean;
   function?: MergeCommonStrategy | "concat" | MergeStrategyFunction;
   mismatch?: MergeCommonStrategy | MergeStrategyFunction;
@@ -53,11 +54,15 @@ export type MergeOptions = {
   undefined?: MergeCommonStrategy | MergeStrategyFunction;
 };
 
-export type MergeResult<Objects extends any[]> = Objects extends [
+export type MergeResult<MergeInput extends any[]> = MergeInput extends [
   infer Head,
   ...infer Tail,
 ]
   ? Head extends {}
     ? Head | MergeResult<Tail>
-    : never
-  : {};
+    : never | MergeResult<Tail>
+  : MergeInput extends {}
+    ? MergeInput extends []
+      ? {}
+      : MergeInput
+    : never;

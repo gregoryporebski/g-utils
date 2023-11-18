@@ -1,4 +1,4 @@
-import { isObject } from "typesafe-utils";
+import { isArray, isObject } from "typesafe-utils";
 import type { MergeOptions, MergeResult } from "./types";
 import mergeObjects from "./utils/mergeObjects";
 
@@ -7,13 +7,19 @@ export default function mergeWith<Objects extends any[]>(
   ...objects: Objects
 ): MergeResult<Objects> {
   return objects.reduce((a, b) => {
-    if (!isObject(a)) {
-      console.error("Cannot merge non-objects", { a });
+    if (!isObject(a) || isArray(a)) {
+      if (options.debug) {
+        console.error("Cannot merge non-objects", { a });
+      }
+
       return b;
     }
 
-    if (!isObject(b)) {
-      console.error("Cannot merge non-objects", { b });
+    if (!isObject(b) || isArray(b)) {
+      if (options.debug) {
+        console.error("Cannot merge non-objects", { b });
+      }
+
       return a;
     }
 

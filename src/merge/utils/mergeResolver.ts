@@ -1,3 +1,4 @@
+import { isNonArrayObject } from "@/utils/typeGuards";
 import { isPrimitiveObject, isUndefined } from "typesafe-utils";
 import { concatFunctions } from "../resolvers/concatFunctions";
 import { concatObjects } from "../resolvers/concatObjects";
@@ -26,8 +27,20 @@ const mergeResolverFactory: MergeResolverFactory =
         return concatFunctions(a[key], b[key]);
       }
 
-      if (isPrimitiveObject(a[key]) && isPrimitiveObject(b[key])) {
-        return concatObjects(a[key], b[key]);
+      if (isNonArrayObject(a[key]) && isNonArrayObject(b[key])) {
+        if (isPrimitiveObject(a[key]) && isPrimitiveObject(b[key])) {
+          return concatObjects(a[key], b[key]);
+        }
+
+        if (a[key] instanceof Set && b[key] instanceof Set) {
+          return new Set([...a[key], ...b[key]]);
+        }
+
+        if (a[key] instanceof Map && b[key] instanceof Map) {
+          return new Map([...a[key], ...b[key]]);
+        }
+
+        return b[key];
       }
 
       return a?.[key]?.concat(b[key]) ?? b[key];
