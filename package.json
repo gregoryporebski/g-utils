@@ -1,8 +1,17 @@
 {
-  "name": "g-utils",
-  "module": "index.ts",
+  "name": "@gregoryporebski/g-utils",
   "version": "0.0.1",
+  "author": {
+    "name": "Gregory Porebski",
+    "email": "gregory.porebski@gmail.com"
+  },
+  "license": "LGPL-3.0-or-later",
+  "module": "out/index.js",
+  "types": "out/index.d.ts",
   "type": "module",
+  "scripts": {
+    "build": "bun build.ts && tsc -p tsconfig.dts.json"
+  },
   "devDependencies": {
     "bun-types": "latest",
     "prettier": "latest",
