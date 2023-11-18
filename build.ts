@@ -1,10 +1,10 @@
 const { outputs, ...build } = await Bun.build({
   entrypoints: ["./src/index.ts"],
-  outdir: "./out",
+  outdir: "./lib",
   root: "./src",
   splitting: true,
   sourcemap: "external",
   minify: true,
 });
 
-console.log(build);
+console.log(`Build: ${build.success}`);

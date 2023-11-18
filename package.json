@@ -1,20 +1,37 @@
 {
   "name": "@gregoryporebski/g-utils",
-  "version": "0.0.2",
+  "version": "0.0.1",
+  "description": "Generic, type safe and lightweight utilities for TypeScript",
+  "license": "GNU GPLv3",
   "author": {
-    "name": "Gregory Porebski",
+    "name": "Grzegorz Porębski",
     "email": "gregory.porebski@gmail.com"
   },
-  "license": "LGPL-3.0-or-later",
-  "module": "out/index.js",
-  "types": "out/index.d.ts",
+  "homepage": "https://github.com/gregoryporebski/g-utils",
+  "repository": "https://github.com/gregoryporebski/g-utils",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "type": "module",
+  "keywords": [
+    "typescript",
+    "utils",
+    "generic",
+    "type-safe",
+    "lightweight",
+    "functional"
+  ],
+  "files": [
+    "/lib"
+  ],
   "scripts": {
     "build": "bun build.ts && tsc -p tsconfig.dts.json"
   },
   "devDependencies": {
     "bun-types": "latest",
-    "prettier": "latest",
+    "prettier": "latest"
+  },
+  "peerDependencies": {
     "typesafe-utils": "latest"
   }
 }

@@ -5,7 +5,7 @@
     "declaration": true,
     "noEmit": false,
     "emitDeclarationOnly": true,
-    "outDir": "./out",
+    "outDir": "./lib",
     "incremental": false,
     "tsBuildInfoFile": null
   },
