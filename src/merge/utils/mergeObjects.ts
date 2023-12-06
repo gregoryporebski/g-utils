@@ -5,7 +5,7 @@ import mergeResolverFactory from "./mergeResolver";
 import mergeSelectorFactory from "./mergeSelector";
 
 export default function mergeObjects(options: MergeOptions, a: any, b: any) {
-  Object.keys(b).forEach((key: keyof any) => {
+  Object.getOwnPropertyNames(b).forEach((key: keyof any) => {
     const resolver = (options.resolver ?? mergeResolverFactory)(a, b, key);
     const selector = (options.selector ?? mergeSelectorFactory)(key, b[key]);
 
