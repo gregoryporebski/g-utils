@@ -1,10 +1,13 @@
-const { outputs, ...build } = await Bun.build({
-  entrypoints: ["./src/index.ts"],
+const modules = ["clone", "merge", "omit", "pick"];
+
+Bun.build({
+  entrypoints: [
+    "./src/index.ts",
+    ...modules.map((module) => `./src/${module}/index.ts`),
+  ],
   outdir: "./lib",
   root: "./src",
   splitting: true,
   sourcemap: "external",
   minify: true,
 });
-
-console.log(`Build: ${build.success}`);
