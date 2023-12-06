@@ -1,6 +1,6 @@
 {
   "name": "@gregoryporebski/g-utils",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Generic, type safe and lightweight utilities for TypeScript",
   "license": "GNU GPLv3",
   "author": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gregoryporebski/g-utils.git"
+    "url": "https://github.com/gregoryporebski/g-utils.git"
   },
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -30,7 +30,8 @@
     "build": "bun clean && bun build.ts && tsc -p tsconfig.dts.json",
     "clean": "rm -rf lib doc",
     "doc": "typedoc src --out doc --plugin @mxssfd/typedoc-theme --theme my-theme",
-    "doc:markdown": "bun doc --plugin typedoc-plugin-markdown"
+    "doc:markdown": "bun doc --plugin typedoc-plugin-markdown",
+    "semantic-release": "semantic-release"
   },
   "devDependencies": {
     "@mxssfd/typedoc-theme": "^1.1.3",
