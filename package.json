@@ -1,14 +1,16 @@
 {
   "name": "@gregoryporebski/g-utils",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Generic, type safe and lightweight utilities for TypeScript",
   "license": "GNU GPLv3",
   "author": {
     "name": "Grzegorz Porębski",
     "email": "gregory.porebski@gmail.com"
   },
-  "homepage": "https://github.com/gregoryporebski/g-utils",
-  "repository": "https://github.com/gregoryporebski/g-utils",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gregoryporebski/g-utils.git"
+  },
   "main": "lib/index.js",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -24,15 +26,18 @@
   "files": [
     "/lib"
   ],
-  "publishConfig": {
-    "@gregoryporebski:registry": "https://npm.pkg.github.com"
-  },
   "scripts": {
-    "build": "bun build.ts && tsc -p tsconfig.dts.json"
+    "build": "bun clean && bun build.ts && tsc -p tsconfig.dts.json",
+    "clean": "rm -rf lib doc",
+    "doc": "typedoc src --out doc --plugin @mxssfd/typedoc-theme --theme my-theme",
+    "doc:markdown": "bun doc --plugin typedoc-plugin-markdown"
   },
   "devDependencies": {
+    "@mxssfd/typedoc-theme": "^1.1.3",
     "bun-types": "latest",
-    "prettier": "latest"
+    "prettier": "latest",
+    "typedoc": "latest",
+    "typedoc-plugin-markdown": "latest"
   },
   "peerDependencies": {
     "typesafe-utils": "latest"

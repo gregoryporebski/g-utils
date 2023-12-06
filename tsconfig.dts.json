@@ -9,5 +9,6 @@
     "incremental": false,
     "tsBuildInfoFile": null
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["**/*.test.ts"]
 }

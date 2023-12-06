@@ -145,6 +145,10 @@ lib
 
 .docusaurus
 
+# JsDoc and TypeDoc generated documentation
+
+doc
+
 # Serverless directories
 
 .serverless/
