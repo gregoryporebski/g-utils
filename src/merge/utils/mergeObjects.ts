@@ -15,7 +15,7 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
       return;
     }
 
-    if (options.omit && selector(options.omit) && !isDeepSelector) {
+    if (options.pick && selector(options.pick) && !isDeepSelector) {
       return;
     }
 

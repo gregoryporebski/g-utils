@@ -1,8 +1,14 @@
 import mergeWith from "./mergeWith";
 import type { MergeResult } from "./types";
 
-export default function mergeDeep<Objects extends any[]>(
-  ...objects: Objects
-): MergeResult<Objects> {
+/**
+ * Merges deeply multiple objects into a single object
+ *
+ * @param objects The objects to merge.
+ * @returns The merged object.
+ */
+export default function mergeDeep<MergeInput extends any[]>(
+  ...objects: MergeInput
+): MergeResult<MergeInput> {
   return mergeWith({ deep: true }, ...objects);
 }

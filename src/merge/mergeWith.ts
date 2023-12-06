@@ -2,10 +2,17 @@ import { isArray, isObject } from "typesafe-utils";
 import type { MergeOptions, MergeResult } from "./types";
 import mergeObjects from "./utils/mergeObjects";
 
-export default function mergeWith<Objects extends any[]>(
+/**
+ * Merges multiple objects with customizable options.
+ *
+ * @param options The merge options.
+ * @param objects The objects to merge.
+ * @returns The merged object.
+ */
+export default function mergeWith<MergeInput extends any[]>(
   options: MergeOptions,
-  ...objects: Objects
-): MergeResult<Objects> {
+  ...objects: MergeInput
+): MergeResult<MergeInput> {
   return objects.reduce((a, b) => {
     if (!isObject(a) || isArray(a)) {
       if (options.debug) {
@@ -26,5 +33,5 @@ export default function mergeWith<Objects extends any[]>(
     mergeObjects(options, a, b);
 
     return a;
-  }, {} as MergeResult<Objects>);
+  }, {} as MergeResult<MergeInput>);
 }
