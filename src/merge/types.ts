@@ -42,7 +42,7 @@ export type MergeResolverFactory = (
   a: any,
   b: any,
   key: keyof any
-) => (strategy?: MergeStrategy) => any;
+) => (strategy?: MergeStrategy) => [keyof any, PropertyDescriptor];
 
 export type MergeSelectorFactory = (
   key: keyof any,

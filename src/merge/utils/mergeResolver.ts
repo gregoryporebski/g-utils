@@ -4,54 +4,85 @@ import { concatFunctions } from "../resolvers/concatFunctions";
 import { concatObjects } from "../resolvers/concatObjects";
 import { MergeResolverFactory } from "../types";
 
+const getDescriptor = (object: any, key: keyof any) =>
+  Object.getOwnPropertyDescriptor(object, key);
+
+const getResult = (object: any, key: keyof any) => [
+  key,
+  getDescriptor(object, key),
+];
+
+const getResultWith = (object: any, key: keyof any, modifier: any) => [
+  key,
+  { ...getDescriptor(object, key), ...modifier },
+];
+
 const mergeResolverFactory: MergeResolverFactory =
   (a, b, key) => (strategy) => {
     if (strategy === "replace" || isUndefined(strategy)) {
-      return b[key];
+      return getResult(b, key);
     }
 
     if (strategy === "keep") {
-      return a[key];
+      return getResult(a, key);
     }
 
     if (strategy === "add") {
-      return Object.hasOwn(a, key) ? a[key] + b[key] : b[key];
+      return Object.hasOwn(a, key)
+        ? getResultWith(b, key, { value: a[key] + b[key] })
+        : getResult(b, key);
     }
 
     if (strategy === "subtract") {
-      return Object.hasOwn(a, key) ? a[key] - b[key] : b[key];
+      return Object.hasOwn(a, key)
+        ? getResultWith(b, key, { value: a[key] - b[key] })
+        : getResult(b, key);
     }
 
     if (strategy === "concat") {
       if (typeof a[key] === "function" && typeof b[key] === "function") {
-        return concatFunctions(a[key], b[key]);
+        return getResultWith(b, key, {
+          value: concatFunctions(a[key], b[key]),
+        });
       }
 
       if (isNonArrayObject(a[key]) && isNonArrayObject(b[key])) {
         if (isPrimitiveObject(a[key]) && isPrimitiveObject(b[key])) {
-          return concatObjects(a[key], b[key]);
+          return getResultWith(b, key, {
+            value: concatObjects(a[key], b[key]),
+          });
         }
 
         if (a[key] instanceof Set && b[key] instanceof Set) {
-          return new Set([...a[key], ...b[key]]);
+          return getResultWith(b, key, {
+            value: new Set([...a[key], ...b[key]]),
+          });
         }
 
         if (a[key] instanceof Map && b[key] instanceof Map) {
-          return new Map([...a[key], ...b[key]]);
+          return getResultWith(b, key, {
+            value: new Map([...a[key], ...b[key]]),
+          });
         }
 
-        return b[key];
+        return getResult(b, key);
       }
 
-      return a?.[key]?.concat(b[key]) ?? b[key];
+      return Object.hasOwn(a, key)
+        ? getResultWith(b, key, { value: a[key]?.concat(b[key]) ?? b[key] })
+        : getResult(b, key);
     }
 
     if (strategy === "and") {
-      return Object.hasOwn(a, key) ? a[key] && b[key] : b[key];
+      return Object.hasOwn(a, key)
+        ? getResultWith(b, key, { value: a[key] && b[key] })
+        : getResult(b, key);
     }
 
     if (strategy === "or") {
-      return a[key] || b[key];
+      return Object.hasOwn(a, key)
+        ? getResultWith(b, key, { value: a[key] || b[key] })
+        : getResult(b, key);
     }
 
     if (typeof strategy === "function") {

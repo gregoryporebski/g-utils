@@ -4,8 +4,16 @@ import type { MergeOptions, MergeStrategy } from "../types";
 import mergeResolverFactory from "./mergeResolver";
 import mergeSelectorFactory from "./mergeSelector";
 
+// const entries = Object.entries(Object.getOwnPropertyDescriptors(obj));
+//     return entries.reduce((result, [key, descriptor]) => {
+//         Object.defineProperty(result, key, descriptor);
+//         return result;
+//     }, {});
+
 export default function mergeObjects(options: MergeOptions, a: any, b: any) {
-  Object.getOwnPropertyNames(b).forEach((key: keyof any) => {
+  const keys = Object.keys(Object.getOwnPropertyDescriptors(b));
+
+  keys.forEach((key) => {
     const resolver = (options.resolver ?? mergeResolverFactory)(a, b, key);
     const selector = (options.selector ?? mergeSelectorFactory)(key, b[key]);
 
@@ -22,7 +30,7 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
     if (
       options?.custom?.some((custom) => {
         if (custom.selector(key, b[key])) {
-          a[key] = resolver(custom.strategy);
+          Object.defineProperty(a, ...resolver(custom.strategy));
           return true;
         }
       })
@@ -31,22 +39,22 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
     }
 
     if (b[key] === undefined || typeof b[key] === "undefined") {
-      a[key] = resolver(options.undefined);
+      Object.defineProperty(a, ...resolver(options.undefined));
       return;
     }
 
     if (b[key] === null) {
-      a[key] = resolver(options.null);
+      Object.defineProperty(a, ...resolver(options.null));
       return;
     }
 
     if (typeof a[key] !== typeof b[key]) {
-      a[key] = resolver(options.mismatch);
+      Object.defineProperty(a, ...resolver(options.mismatch));
       return;
     }
 
     if (isArray(b[key])) {
-      a[key] = resolver(options.array ?? "concat");
+      Object.defineProperty(a, ...resolver(options.array ?? "concat"));
       return;
     }
 
@@ -56,7 +64,7 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
         return;
       }
 
-      a[key] = resolver(options.object ?? "concat");
+      Object.defineProperty(a, ...resolver(options.object ?? "concat"));
       return;
     }
 
@@ -71,7 +79,10 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
 
       const mappedKey = dictionary[typeof b[key]] ?? typeof b[key];
 
-      a[key] = resolver(options[mappedKey as keyof MergeStrategy]);
+      Object.defineProperty(
+        a,
+        ...resolver(options[mappedKey as keyof MergeStrategy])
+      );
       return;
     }
 
