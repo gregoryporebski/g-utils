@@ -32,6 +32,8 @@ export default function mergeWith<MergeInput extends any[]>(
 
     mergeObjects(options, a, b);
 
+    Object.setPrototypeOf(a, Object.getPrototypeOf(b));
+
     return a;
   }, {} as MergeResult<MergeInput>);
 }

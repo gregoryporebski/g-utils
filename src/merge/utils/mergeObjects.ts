@@ -4,12 +4,6 @@ import type { MergeOptions, MergeStrategy } from "../types";
 import mergeResolverFactory from "./mergeResolver";
 import mergeSelectorFactory from "./mergeSelector";
 
-// const entries = Object.entries(Object.getOwnPropertyDescriptors(obj));
-//     return entries.reduce((result, [key, descriptor]) => {
-//         Object.defineProperty(result, key, descriptor);
-//         return result;
-//     }, {});
-
 export default function mergeObjects(options: MergeOptions, a: any, b: any) {
   const keys = Object.keys(Object.getOwnPropertyDescriptors(b));
 
