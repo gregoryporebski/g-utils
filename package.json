@@ -11,7 +11,6 @@
     "type": "git",
     "url": "https://github.com/gregoryporebski/g-utils.git"
   },
-  "main": "lib/index.js",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "type": "module",
@@ -27,11 +26,11 @@
     "/lib"
   ],
   "scripts": {
-    "build": "bun clean && bun build.ts && tsc -p tsconfig.dts.json",
+    "build": "run-s clean build:*",
+    "build:module": "bun build.ts",
+    "build:types": "tsc -p tsconfig.dts.json",
     "clean": "rm -rf lib doc",
-    "doc": "typedoc src --out doc --plugin @mxssfd/typedoc-theme --theme my-theme",
-    "doc:markdown": "bun doc --plugin typedoc-plugin-markdown",
-    "semantic-release": "semantic-release"
+    "doc": "typedoc src --out doc --plugin @mxssfd/typedoc-theme --theme my-theme"
   },
   "devDependencies": {
     "@mxssfd/typedoc-theme": "latest",
@@ -40,6 +39,7 @@
     "@semantic-release/npm": "latest",
     "@semantic-release/release-notes-generator": "latest",
     "bun-types": "latest",
+    "npm-run-all": "latest",
     "prettier": "latest",
     "semantic-release": "latest",
     "typedoc": "latest",
