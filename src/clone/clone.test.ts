@@ -1,326 +1,369 @@
 import { clone } from "@/clone";
-import { describe, expect, it } from "bun:test";
+import { describe, expect, mock, test } from "bun:test";
 
 describe("clone", () => {
-  it("should handle strings", () => {
-    const input = "Lorem ipsum";
-    const clonedInput = clone(input);
-
-    expect(input).toBe(clonedInput);
-  });
-
-  it("should handle numbers", () => {
-    const input = 123;
-    const clonedInput = clone(input);
-
-    expect(input).toBe(clonedInput);
-  });
-
-  it("should handle booleans", () => {
-    const input = true;
-    const clonedInput = clone(input);
-
-    expect(input).toBe(clonedInput);
-  });
-
-  it("should handle null", () => {
-    const input = null;
-    const clonedInput = clone(input);
-
-    expect(input).toBe(clonedInput);
-  });
-
-  it("should handle undefined", () => {
+  test("undefined", () => {
     const input = undefined;
     const clonedInput = clone(input);
 
-    expect(input).toBe(clonedInput);
+    expect(clonedInput).toBe(input);
   });
 
-  it("should handle functions", () => {
-    const input = () => {};
+  test("null", () => {
+    const input = null;
     const clonedInput = clone(input);
 
-    expect(input).toBe(clonedInput);
+    expect(clonedInput).toBe(input);
   });
 
-  it("should handle dates", () => {
+  test("string", () => {
+    const input = "Lorem ipsum";
+    const clonedInput = clone(input);
+
+    expect(clonedInput).toBe(input);
+  });
+
+  test("number", () => {
+    const input = 123;
+    const clonedInput = clone(input);
+
+    expect(clonedInput).toBe(input);
+  });
+
+  test("boolean", () => {
+    const input = true;
+    const clonedInput = clone(input);
+
+    expect(clonedInput).toBe(input);
+  });
+
+  test("array", () => {
+    const input = [1, 2, 3];
+    const clonedInput = clone(input);
+
+    expect(clonedInput).toEqual(input);
+    expect(clonedInput).not.toBe(input);
+  });
+
+  test("object", () => {
+    const input = { a: 1, b: 2 };
+    const clonedInput = clone(input);
+
+    expect(clonedInput).toEqual(input);
+    expect(clonedInput).not.toBe(input);
+  });
+
+  test("function", () => {
+    const input = mock(() => {});
+    const clonedInput = clone(input);
+    clonedInput();
+
+    expect(clonedInput).not.toBe(input);
+    expect(input).toHaveBeenCalled();
+  });
+
+  test("Date", () => {
     const input = new Date();
     const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
+    expect(clonedInput).toEqual(input);
+    expect(clonedInput).not.toBe(input);
   });
 
-  it("should handle regular expressions", () => {
+  test("RegExp", () => {
     const input = /test/g;
     const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
+    expect(clonedInput).toEqual(input);
+    expect(clonedInput).not.toBe(input);
   });
 
-  it("should handle symbols", () => {
+  test("Symbol", () => {
     const input = Symbol("test");
     const clonedInput = clone(input);
 
     // @ts-expect-error
-    expect(input).toBe(clonedInput);
+    expect(clonedInput.description).toEqual(input.description);
+    expect(clonedInput).not.toBe(input);
   });
 
-  it("should handle BigInts", () => {
+  test("BigInt", () => {
     const input = BigInt(123);
     const clonedInput = clone(input);
 
-    expect(input).toBe(clonedInput);
+    expect(clonedInput).toBe(input);
   });
 
-  it("should handle Maps", () => {
-    const input = new Map();
-    input.set("key", "value");
+  test("Map", () => {
+    const input = new Map([["key", "value"]]);
     const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
+    expect(clonedInput).toEqual(input);
+    expect(clonedInput).not.toBe(input);
   });
 
-  it("should handle Sets", () => {
-    const input = new Set();
-    input.add("value");
+  test("Set", () => {
+    const input = new Set(["value"]);
     const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
+    expect(clonedInput).toEqual(input);
+    expect(clonedInput).not.toBe(input);
   });
 
-  it("should handle Promises", () => {
+  test("Promise", () => {
     const input = new Promise(() => {});
     const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
+    expect(clonedInput).toEqual(input);
+    expect(clonedInput).not.toBe(input);
   });
 
-  it("should handle errors", () => {
+  test("Error", () => {
     const input = new Error("test");
     const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
+    expect(clonedInput).toEqual(input);
+    expect(clonedInput).not.toBe(input);
   });
 
-  it("should handle Infinity", () => {
+  test("Infinity", () => {
     const input = Infinity;
     const clonedInput = clone(input);
 
-    expect(input).toBe(clonedInput);
+    expect(clonedInput).toBe(input);
   });
 
-  it("should handle NaN", () => {
+  test("NaN", () => {
     const input = NaN;
     const clonedInput = clone(input);
 
-    expect(input).toBe(clonedInput);
+    expect(clonedInput).toBe(input);
   });
 
-  it("should handle buffers", () => {
+  test("Buffer", () => {
     const input = Buffer.from("test");
     const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
+    expect(clonedInput).toEqual(input);
+    expect(clonedInput).not.toBe(input);
   });
 
-  it("should handle array buffers", () => {
+  test("ArrayBuffer", () => {
     const input = new ArrayBuffer(8);
     const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
+    expect(clonedInput).toEqual(input);
+    expect(clonedInput).not.toBe(input);
   });
 
-  it("should handle circular references", () => {
-    const input: any = { a: null };
-    input.a = input;
-    const clonedInput = clone(input);
+  describe("object with", () => {
+    test("undefined", () => {
+      const input = { a: undefined };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input.a).toBe(clonedInput.a);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle inherited properties", () => {
-    const parent = { a: 1 };
-    const input = Object.create(parent);
-    input.b = 2;
-    const clonedInput = clone(input);
+    test("null", () => {
+      const input = { a: null };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-    expect(Object.getPrototypeOf(clonedInput)).toEqual(parent);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle non-enumerable properties", () => {
-    const input = {};
-    Object.defineProperty(input, "a", { value: 1, enumerable: false });
-    const clonedInput = clone(input);
-    const descriptor = Object.getOwnPropertyDescriptor(clonedInput, "a");
+    test("string", () => {
+      const input = { a: "Lorem ipsum" };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-    expect(descriptor?.enumerable).toBe(false);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle getter and setter properties", () => {
-    const input = {
-      get a() {
-        return 1;
-      },
-      set a(value) {},
-    };
-    const clonedInput = clone(input);
+    test("number", () => {
+      const input = { a: 123 };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-    const descriptor = Object.getOwnPropertyDescriptor(clonedInput, "a");
-    expect(typeof descriptor?.get).toBe("function");
-    expect(typeof descriptor?.set).toBe("function");
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle arrays", () => {
-    const input = [1, 2, 3];
-    const clonedInput = clone(input);
+    test("boolean", () => {
+      const input = { a: true };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects", () => {
-    const input = { a: 1, b: 2 };
-    const clonedInput = clone(input);
+    test("array", () => {
+      const input = { a: [1, 2, 3] };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with null values", () => {
-    const input = { a: null };
-    const clonedInput = clone(input);
+    test("object", () => {
+      const input = { a: { b: 1, c: 2 } };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with undefined values", () => {
-    const input = { a: undefined };
-    const clonedInput = clone(input);
+    test("function", () => {
+      const input = { a: () => {} };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with function values", () => {
-    const input = { a: () => {} };
-    const clonedInput = clone(input);
+    test("Date", () => {
+      const input = { a: new Date() };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with date values", () => {
-    const input = { a: new Date() };
-    const clonedInput = clone(input);
+    test("RegExp", () => {
+      const input = { a: /test/g };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with regular expression values", () => {
-    const input = { a: /test/g };
-    const clonedInput = clone(input);
+    test("Symbol", () => {
+      const input = { a: Symbol("test") };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with symbol values", () => {
-    const input = { a: Symbol("test") };
-    const clonedInput = clone(input);
+    test("BigInt", () => {
+      const input = { a: BigInt(123) };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with BigInt values", () => {
-    const input = { a: BigInt(123) };
-    const clonedInput = clone(input);
+    test("Map", () => {
+      const input = { a: new Map() };
+      input.a.set("key", "value");
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with Map values", () => {
-    const input = { a: new Map() };
-    input.a.set("key", "value");
-    const clonedInput = clone(input);
+    test("Set", () => {
+      const input = { a: new Set() };
+      input.a.add("value");
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with Set values", () => {
-    const input = { a: new Set() };
-    input.a.add("value");
-    const clonedInput = clone(input);
+    test("Promise", () => {
+      const input = { a: new Promise(() => {}) };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with Promise values", () => {
-    const input = { a: new Promise(() => {}) };
-    const clonedInput = clone(input);
+    test("Error", () => {
+      const input = { a: new Error("test") };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with error values", () => {
-    const input = { a: new Error("test") };
-    const clonedInput = clone(input);
+    test("Infinity", () => {
+      const input = { a: Infinity };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with Infinity values", () => {
-    const input = { a: Infinity };
-    const clonedInput = clone(input);
+    test("NaN", () => {
+      const input = { a: NaN };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with NaN values", () => {
-    const input = { a: NaN };
-    const clonedInput = clone(input);
+    test("Buffer", () => {
+      const input = { a: Buffer.from("test") };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with buffer values", () => {
-    const input = { a: Buffer.from("test") };
-    const clonedInput = clone(input);
+    test("ArrayBuffer", () => {
+      const input = { a: new ArrayBuffer(8) };
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
-  });
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+    });
 
-  it("should handle objects with array buffer values", () => {
-    const input = { a: new ArrayBuffer(8) };
-    const clonedInput = clone(input);
+    test("circular references", () => {
+      const input: any = { a: null };
+      input.a = input;
+      const clonedInput = clone(input);
 
-    expect(input).toEqual(clonedInput);
-    expect(input).not.toBe(clonedInput);
+      expect(clonedInput).toEqual(input);
+      expect(input.a).toBe(clonedInput.a);
+    });
+
+    test("inherited properties", () => {
+      const parent = { a: 1 };
+      const input = Object.create(parent);
+      input.b = 2;
+      const clonedInput = clone(input);
+
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+      expect(Object.getPrototypeOf(clonedInput)).toEqual(parent);
+    });
+
+    test("non-enumerable properties", () => {
+      const input = {};
+      Object.defineProperty(input, "a", { value: 1, enumerable: false });
+      const clonedInput = clone(input);
+      const descriptor = Object.getOwnPropertyDescriptor(clonedInput, "a");
+
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+      expect(descriptor?.enumerable).toBe(false);
+    });
+
+    test("getter and setter properties", () => {
+      const input = {
+        get a() {
+          return 1;
+        },
+        set a(value) {},
+      };
+      const clonedInput = clone(input);
+
+      expect(clonedInput).toEqual(input);
+      expect(clonedInput).not.toBe(input);
+      const descriptor = Object.getOwnPropertyDescriptor(clonedInput, "a");
+      expect(typeof descriptor?.get).toBe("function");
+      expect(typeof descriptor?.set).toBe("function");
+    });
   });
 });
