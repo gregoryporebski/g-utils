@@ -190,5 +190,3 @@ export type MergeResult<MergeInput extends any[]> = MergeInput extends [
       ? {}
       : MergeInput
     : never;
-
-type X = MergeResult<[{ a: 1; b: "lorem" }, { b: "ipsum"; c: true }]>;
