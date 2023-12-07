@@ -11,7 +11,7 @@ await Bun.build({
   outdir: "./lib",
   root: "./src",
   splitting: true,
-  sourcemap: "external",
+  sourcemap: "none",
   minify: true,
 });
 
