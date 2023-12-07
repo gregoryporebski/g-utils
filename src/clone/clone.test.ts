@@ -64,6 +64,7 @@ describe("clone", () => {
     const input = Symbol("test");
     const clonedInput = clone(input);
 
+    // @ts-expect-error
     expect(input).toBe(clonedInput);
   });
 
