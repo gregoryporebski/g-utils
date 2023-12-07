@@ -1,7 +1,7 @@
-import { mergeDeep } from "@/merge";
+import { cloneWith } from ".";
 
 export default function cloneDeep<CloneInput extends object>(
   object: CloneInput
 ): CloneInput {
-  return mergeDeep({}, object) as CloneInput;
+  return cloneWith({ deep: true }, object) as CloneInput;
 }
