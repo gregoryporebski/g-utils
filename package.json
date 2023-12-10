@@ -28,7 +28,7 @@
   "scripts": {
     "build": "run-s clean build:*",
     "build:module": "bun build.ts",
-    "build:types": "tsc -p tsconfig.dts.json",
+    "build:types": "tsc -p tsconfig.build.json",
     "clean": "rm -rf lib doc",
     "doc": "typedoc src --out doc --plugin @mxssfd/typedoc-theme --theme my-theme"
   },
