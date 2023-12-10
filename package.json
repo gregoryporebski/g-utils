@@ -45,8 +45,5 @@
     "typedoc": "latest",
     "typedoc-plugin-markdown": "latest",
     "typescript": "latest"
-  },
-  "peerDependencies": {
-    "typesafe-utils": "latest"
   }
 }
