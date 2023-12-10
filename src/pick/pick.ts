@@ -1,9 +1,9 @@
 import { mergeWith } from "@/merge";
-import { PickOptions } from "./types";
+import { PickOptions, PickResult } from "./types";
 
 export default function pick<PickInput extends object>(
   options: PickOptions,
   object: PickInput
-): Partial<PickInput> {
+): PickResult<PickInput> {
   return mergeWith({ pick: options }, {}, object);
 }

@@ -1,7 +1,9 @@
 import mergeDeepWith from "./mergeDeepWith";
-import type { MergeOptions } from "./types";
+import type { MergeFactory } from "./types";
 
-export default function mergeDeepWithFactory(options: MergeOptions) {
-  return <Objects extends any[]>(...objects: Objects) =>
+const mergeDeepWithFactory: MergeFactory =
+  (options) =>
+  <Objects extends any[]>(...objects: Objects) =>
     mergeDeepWith(options, ...objects);
-}
+
+export default mergeDeepWithFactory;

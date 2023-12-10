@@ -1,4 +1,4 @@
-import { isArray, isObject } from "typesafe-utils";
+import { isPrimitiveObject } from "typesafe-utils";
 import type { MergeOptions, MergeResult } from "./types";
 import mergeObjects from "./utils/mergeObjects";
 
@@ -14,26 +14,19 @@ export default function mergeWith<MergeInput extends any[]>(
   ...objects: MergeInput
 ): MergeResult<MergeInput> {
   return objects.reduce((a, b) => {
-    if (!isObject(a) || isArray(a)) {
+    if (!isPrimitiveObject(b)) {
       if (options.debug) {
-        console.error("Cannot merge non-objects", { a });
-      }
-
-      return b;
-    }
-
-    if (!isObject(b) || isArray(b)) {
-      if (options.debug) {
-        console.error("Cannot merge non-objects", { b });
+        console.error("Only primitive objects can be merged", { b });
       }
 
       return a;
     }
 
-    mergeObjects(options, a, b);
+    const result = a ?? {};
+    mergeObjects(options, result, b);
 
-    Object.setPrototypeOf(a, Object.getPrototypeOf(b));
+    Object.setPrototypeOf(result, Object.getPrototypeOf(b));
 
-    return a;
-  }, {} as MergeResult<MergeInput>);
+    return result;
+  }, null as any);
 }

@@ -1,3 +1,5 @@
+import { Prettify } from "@/types";
+
 /**
  * Represents the strategy for merging common values.
  * - "replace": Replaces the existing value with the new value.
@@ -168,25 +170,43 @@ export type MergeOptions = {
   undefined?: MergeCommonStrategy | MergeStrategyFunction;
 };
 
+export type NonPrimitiveObject =
+  | Array<any>
+  | Function
+  | Date
+  | RegExp
+  | Map<any, any>
+  | Set<any>
+  | Promise<any>
+  | Error
+  | Buffer
+  | ArrayBuffer;
+
 /**
- * Represents the result of merging multiple input types.
- * @template MergeInput - The input types to be merged.
+ * Represents the result of merging multiple primitive objects .
+ * @template MergeInput - Primitive objects to be merged.
  * @returns Union type representing the possible merge results.
  * @group merge
  * @example
- * const A = { a: 1, b: "lorem" };
- * const B = { b: "ipsum", c: true };
- * type Result = MergeResult<[typeof A, typeof B]>; // {} | { a: 1; b: "lorem" } | { b: "ipsum"; c: true }
+ * MergeResult<{ a: string }, { b: number }>; // { a: string } | { b: number }
+ * MergeResult<string, { b: number }>; // { b: number }
+ * MergeResult<string, number>; // null
  */
-export type MergeResult<MergeInput extends any[]> = MergeInput extends [
-  infer Head,
-  ...infer Tail,
-]
-  ? Head extends {}
-    ? Head | MergeResult<Tail>
-    : never | MergeResult<Tail>
-  : MergeInput extends {}
-    ? MergeInput extends []
-      ? {}
-      : MergeInput
-    : never;
+export type MergeResult<
+  MergeInput extends any[],
+  IsResultValid extends boolean = false,
+> = Prettify<
+  MergeInput extends [infer Head, ...infer Tail]
+    ? Head extends object
+      ? Head extends NonPrimitiveObject
+        ? null | MergeResult<Tail, IsResultValid>
+        : Head | MergeResult<Tail, true>
+      : MergeResult<Tail, IsResultValid>
+    : IsResultValid extends true
+      ? never
+      : null
+>;
+
+export type MergeFactory = (
+  options: MergeOptions
+) => <Objects extends any[]>(...objects: Objects) => MergeResult<Objects>;
