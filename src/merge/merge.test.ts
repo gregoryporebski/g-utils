@@ -2,116 +2,251 @@ import { describe, expect, test } from "bun:test";
 import merge from "./merge";
 
 describe("merge", () => {
-  describe("not primitive objects", () => {
-    test("undefined", () => {
-      expect(merge(undefined)).toBe(null);
+  test("undefined", () => {
+    expect(merge(undefined)).toBe(null);
+    expect(merge(undefined, undefined)).toBe(null);
+  });
+
+  test("null", () => {
+    expect(merge(null)).toBe(null);
+    expect(merge(null, null)).toBe(null);
+  });
+
+  test("string", () => {
+    expect(merge("hello")).toBe(null);
+    expect(merge("hello", "world")).toBe(null);
+  });
+
+  test("number", () => {
+    expect(merge(123)).toBe(null);
+    expect(merge(123, 456)).toBe(null);
+  });
+
+  test("boolean", () => {
+    expect(merge(true)).toBe(null);
+    expect(merge(true, false)).toBe(null);
+  });
+
+  test("array", () => {
+    expect(merge([1, 2, 3])).toBe(null);
+    expect(merge([1, 2, 3], [4, 5, 6])).toBe(null);
+  });
+
+  test("function", () => {
+    expect(merge(() => {})).toBe(null);
+    expect(
+      merge(
+        () => {},
+        () => {}
+      )
+    ).toBe(null);
+  });
+
+  test("Date", () => {
+    expect(merge(new Date())).toBe(null);
+    expect(merge(new Date(), new Date())).toBe(null);
+  });
+
+  test("RegExp", () => {
+    expect(merge(/lorem/g)).toBe(null);
+    expect(merge(/lorem/g, /ipsum/g)).toBe(null);
+  });
+
+  test("Symbol", () => {
+    expect(merge(Symbol("lorem"))).toBe(null);
+    expect(merge(Symbol("lorem"), Symbol("ipsum"))).toBe(null);
+  });
+
+  test("BigInt", () => {
+    expect(merge(BigInt(123))).toBe(null);
+    expect(merge(BigInt(123), BigInt(456))).toBe(null);
+  });
+
+  test("Map", () => {
+    expect(merge(new Map())).toBe(null);
+    expect(merge(new Map(), new Map())).toBe(null);
+  });
+
+  test("WeakMap", () => {
+    expect(merge(new WeakMap())).toBe(null);
+    expect(merge(new WeakMap(), new WeakMap())).toBe(null);
+  });
+
+  test("Set", () => {
+    expect(merge(new Set())).toBe(null);
+    expect(merge(new Set(), new Set())).toBe(null);
+  });
+
+  test("WeakSet", () => {
+    expect(merge(new WeakSet())).toBe(null);
+    expect(merge(new WeakSet(), new WeakSet())).toBe(null);
+  });
+
+  test("Promise", () => {
+    expect(merge(new Promise(() => {}))).toBe(null);
+    expect(merge(new Promise(() => {}), new Promise(() => {}))).toBe(null);
+  });
+
+  test("Error", () => {
+    expect(merge(new Error())).toBe(null);
+    expect(merge(new Error(), new Error())).toBe(null);
+  });
+
+  test("URL", () => {
+    expect(merge(new URL("http://localhost"))).toBe(null);
+    expect(
+      merge(new URL("http://localhost"), new URL("http://localhost"))
+    ).toBe(null);
+  });
+
+  test("URLSearchParams", () => {
+    expect(merge(new URLSearchParams())).toBe(null);
+    expect(merge(new URLSearchParams(), new URLSearchParams())).toBe(null);
+  });
+
+  test("Infinity", () => {
+    expect(merge(Infinity)).toBe(null);
+    expect(merge(Infinity, Infinity)).toBe(null);
+    expect(merge(-Infinity)).toBe(null);
+    expect(merge(-Infinity, -Infinity)).toBe(null);
+  });
+
+  test("NaN", () => {
+    expect(merge(NaN)).toBe(null);
+    expect(merge(NaN, NaN)).toBe(null);
+    expect(merge(-NaN)).toBe(null);
+    expect(merge(-NaN, -NaN)).toBe(null);
+  });
+
+  test("Buffer", () => {
+    expect(merge(Buffer.from("lorem"))).toBe(null);
+    expect(merge(Buffer.from("lorem"), Buffer.from("ipsum"))).toBe(null);
+  });
+
+  test("ArrayBuffer", () => {
+    expect(merge(new ArrayBuffer(8))).toBe(null);
+    expect(merge(new ArrayBuffer(8), new ArrayBuffer(8))).toBe(null);
+  });
+
+  test("SharedArrayBuffer", () => {
+    expect(merge(new SharedArrayBuffer(8))).toBe(null);
+    expect(merge(new SharedArrayBuffer(8), new SharedArrayBuffer(8))).toBe(
+      null
+    );
+  });
+
+  test("DataView", () => {
+    expect(merge(new DataView(new ArrayBuffer(8)))).toBe(null);
+    expect(
+      merge(new DataView(new ArrayBuffer(8)), new DataView(new ArrayBuffer(8)))
+    ).toBe(null);
+  });
+
+  describe("typed arrays", () => {
+    test("Int8Array", () => {
+      expect(merge(new Int8Array(8))).toBe(null);
+      expect(merge(new Int8Array(8), new Int8Array(8))).toBe(null);
     });
 
-    test("null", () => {
-      expect(merge(null)).toBe(null);
+    test("Uint8Array", () => {
+      expect(merge(new Uint8Array(8))).toBe(null);
+      expect(merge(new Uint8Array(8), new Uint8Array(8))).toBe(null);
     });
 
-    test("string", () => {
-      expect(merge("hello")).toBe(null);
+    test("Uint8ClampedArray", () => {
+      expect(merge(new Uint8ClampedArray(8))).toBe(null);
+      expect(merge(new Uint8ClampedArray(8), new Uint8ClampedArray(8))).toBe(
+        null
+      );
     });
 
-    test("number", () => {
-      expect(merge(123)).toBe(null);
+    test("Int16Array", () => {
+      expect(merge(new Int16Array(8))).toBe(null);
+      expect(merge(new Int16Array(8), new Int16Array(8))).toBe(null);
     });
 
-    test("boolean", () => {
-      expect(merge(true)).toBe(null);
+    test("Uint16Array", () => {
+      expect(merge(new Uint16Array(8))).toBe(null);
+      expect(merge(new Uint16Array(8), new Uint16Array(8))).toBe(null);
     });
 
-    test("array", () => {
-      expect(merge([1, 2, 3])).toBe(null);
+    test("Int32Array", () => {
+      expect(merge(new Int32Array(8))).toBe(null);
+      expect(merge(new Int32Array(8), new Int32Array(8))).toBe(null);
     });
 
-    test("function", () => {
-      expect(merge(() => {})).toBe(null);
+    test("Uint32Array", () => {
+      expect(merge(new Uint32Array(8))).toBe(null);
+      expect(merge(new Uint32Array(8), new Uint32Array(8))).toBe(null);
     });
 
-    test("Date", () => {
-      expect(merge(new Date())).toBe(null);
+    test("Float32Array", () => {
+      expect(merge(new Float32Array(8))).toBe(null);
+      expect(merge(new Float32Array(8), new Float32Array(8))).toBe(null);
     });
 
-    test("RegExp", () => {
-      expect(merge(/test/g)).toBe(null);
-    });
-
-    test("Symbol", () => {
-      expect(merge(Symbol("test"))).toBe(null);
-    });
-
-    test("BigInt", () => {
-      expect(merge(BigInt(123))).toBe(null);
-    });
-
-    test("Map", () => {
-      expect(merge(new Map())).toBe(null);
-    });
-
-    test("Set", () => {
-      expect(merge(new Set())).toBe(null);
-    });
-
-    test("Promise", () => {
-      expect(merge(new Promise(() => {}))).toBe(null);
-    });
-
-    test("Error", () => {
-      expect(merge(new Error())).toBe(null);
-    });
-
-    test("Infinity", () => {
-      expect(merge(Infinity)).toBe(null);
-      expect(merge(-Infinity)).toBe(null);
-    });
-
-    test("NaN", () => {
-      expect(merge(NaN)).toBe(null);
-      expect(merge(-NaN)).toBe(null);
-    });
-
-    test("Buffer", () => {
-      expect(merge(Buffer.from("test"))).toBe(null);
-    });
-
-    test("ArrayBuffer", () => {
-      expect(merge(new ArrayBuffer(8))).toBe(null);
+    test("Float64Array", () => {
+      expect(merge(new Float64Array(8))).toBe(null);
+      expect(merge(new Float64Array(8), new Float64Array(8))).toBe(null);
     });
   });
 
-  describe("two same type arguments", () => {
-    test("undefined", () => {
-      expect(merge(undefined, undefined)).toEqual(null);
+  describe("objects with", () => {
+    test("undefined properties", () => {
+      const obj1 = { a: undefined };
+      const obj2 = { a: undefined };
+      expect(merge(obj1, obj2)).toEqual({ a: undefined });
     });
 
-    test("null", () => {
-      expect(merge(null, null)).toEqual(null);
+    test("null properties", () => {
+      const obj1 = { a: null };
+      const obj2 = { a: null };
+      expect(merge(obj1, obj2)).toEqual({ a: null });
     });
 
-    test("string", () => {
-      expect(merge("hello", "world")).toEqual(null);
+    test("string properties", () => {
+      const obj1 = { a: "hello" };
+      const obj2 = { a: "world" };
+      expect(merge(obj1, obj2)).toEqual({ a: "world" });
     });
 
-    test("number", () => {
-      expect(merge(123, 456)).toEqual(null);
+    test("string keys", () => {
+      const obj1 = { "hello world": 123 };
+      const obj2 = { "hello world": 456 };
+      expect(merge(obj1, obj2)).toEqual({ "hello world": 456 });
     });
-  });
 
-  test("two simple objects", () => {
-    const obj1 = { a: 1 };
-    const obj2 = { b: 2 };
-    expect(merge(obj1, obj2)).toEqual({ a: 1, b: 2 });
-  });
+    test("number properties", () => {
+      const obj1 = { a: 123 };
+      const obj2 = { a: 456 };
+      expect(merge(obj1, obj2)).toEqual({ a: 456 });
+    });
 
-  test("three simple objects", () => {
-    const obj1 = { a: 1 };
-    const obj2 = { b: 2 };
-    const obj3 = { c: 3 };
-    expect(merge(obj1, obj2, obj3)).toEqual({ a: 1, b: 2, c: 3 });
-    expect(merge(obj3, obj2, obj1)).toEqual({ a: 1, b: 2, c: 3 });
+    test("number keys", () => {
+      const obj1 = { 123: "hello" };
+      const obj2 = { 123: "world" };
+      expect(merge(obj1, obj2)).toEqual({ 123: "world" });
+    });
+
+    test("boolean properties", () => {
+      const obj1 = { a: true };
+      const obj2 = { a: false };
+      expect(merge(obj1, obj2)).toEqual({ a: false });
+    });
+
+    test("symbol properties", () => {
+      const obj1 = { a: Symbol("lorem") };
+      const obj2 = { a: Symbol("ipsum") };
+      expect(merge(obj1, obj2)).toEqual({ a: obj2.a });
+    });
+
+    test("symbol keys", () => {
+      const key1 = Symbol("lorem");
+      const key2 = Symbol("ipsum");
+      const obj1 = { [key1]: "hello" };
+      const obj2 = { [key2]: "world" };
+      expect(merge(obj1, obj2)).toEqual({ [key1]: "hello", [key2]: "world" });
+    });
   });
 
   test("overwrite properties", () => {
@@ -327,5 +462,30 @@ describe("merge", () => {
     const obj2 = { a: -Infinity };
     expect(merge(obj1, obj2)).toEqual({ a: -Infinity });
     expect(merge(obj2, obj1)).toEqual({ a: -Infinity });
+  });
+
+  describe("crazy objects with", () => {
+    test("empty prototype", () => {
+      const obj1 = Object.create({});
+      const obj2 = Object.create({});
+      expect(merge(obj1, obj2)).toEqual({});
+    });
+
+    test("null prototype", () => {
+      const obj1 = Object.create(null);
+      const obj2 = Object.create(null);
+      expect(merge(obj1, obj2)).toEqual(null as any);
+    });
+
+    test("Object.prototype", () => {
+      expect(merge({}, {})).toEqual({});
+    });
+
+    test("custom prototype", () => {
+      const proto = { a: 1 };
+      const obj1 = Object.create(proto);
+      const obj2 = Object.create(proto);
+      expect(merge(obj1, obj2)).toEqual({});
+    });
   });
 });
