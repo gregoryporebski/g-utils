@@ -1,53 +1,55 @@
 import { mergeWith } from "@/merge";
+import { isNull, isObject, isPrimitiveObject } from "typesafe-utils";
 import { CloneOptions } from "./types";
 
 export default function cloneWith<CloneInput>(
   options: CloneOptions,
   input: CloneInput
 ): CloneInput {
-  if (input === null || input === undefined) {
-    return input;
-  }
+  switch (true) {
+    case isNull(input):
+      return input;
 
-  if (input instanceof Date) {
-    return new Date(input) as CloneInput;
-  }
+    case Array.isArray(input):
+      return [...input] as CloneInput;
 
-  if (input instanceof RegExp) {
-    return new RegExp(input) as CloneInput;
-  }
+    case isPrimitiveObject(input):
+      return mergeWith(options, input) as CloneInput;
 
-  if (input instanceof Set) {
-    return new Set(input) as CloneInput;
-  }
+    case input instanceof Promise:
+      return input.then() as CloneInput;
 
-  if (input instanceof Map) {
-    return new Map(input) as CloneInput;
-  }
+    case input instanceof WeakMap:
+    case input instanceof WeakSet:
+      if (options.debug) {
+        console.warn(
+          `Cannot clone ${input.constructor.name} objects. Returning original object.`
+        );
+      }
+      return input;
 
-  if (input instanceof Buffer) {
-    return Buffer.from(input) as CloneInput;
-  }
+    case input instanceof ArrayBuffer:
+    case input instanceof SharedArrayBuffer:
+      return input.slice(0) as CloneInput;
 
-  if (input instanceof ArrayBuffer) {
-    return new ArrayBuffer(input.byteLength) as CloneInput;
-  }
+    case input instanceof DataView:
+      return new DataView(
+        cloneWith(options, input.buffer),
+        input.byteOffset,
+        input.byteLength
+      ) as CloneInput;
 
-  if (Array.isArray(input)) {
-    return [...input] as CloneInput;
-  }
+    case isObject(input):
+      // @ts-expect-error
+      return new input.constructor(input) as CloneInput;
 
-  if (typeof input === "object") {
-    return mergeWith(options, input) as CloneInput;
-  }
+    case typeof input === "function":
+      return input.bind({}) as CloneInput;
 
-  if (typeof input === "function") {
-    return input.bind({});
-  }
+    case typeof input === "symbol":
+      return Symbol(input.description) as CloneInput;
 
-  if (typeof input === "symbol") {
-    return Symbol(input.description) as CloneInput;
+    default:
+      return input;
   }
-
-  return input;
 }
