@@ -9,4 +9,5 @@ export default {
     "@semantic-release/npm",
     "@semantic-release/github",
   ],
+  preset: "angular",
 };
