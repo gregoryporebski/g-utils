@@ -43,7 +43,8 @@
     "prettier": "latest",
     "semantic-release": "latest",
     "typedoc": "latest",
-    "typedoc-plugin-markdown": "latest"
+    "typedoc-plugin-markdown": "latest",
+    "typescript": "latest"
   },
   "peerDependencies": {
     "typesafe-utils": "latest"
