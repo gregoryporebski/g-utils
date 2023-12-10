@@ -29,7 +29,8 @@ describe("mergeDeep", () => {
   test("should merge objects with arrays that contain objects", () => {
     const obj1 = { a: { b: [{ c: 1 }, { d: 2 }] } };
     const obj2 = { a: { b: [{ e: 3 }, { f: 4 }] } };
-    expect(mergeDeep(obj1, obj2)).toEqual({
+
+    expect(mergeDeep(obj1, obj2) as any).toEqual({
       a: {
         b: [{ c: 1 }, { d: 2 }, { e: 3 }, { f: 4 }],
       },

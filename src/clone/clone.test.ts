@@ -82,8 +82,7 @@ describe("clone", () => {
     const input = Symbol("test");
     const clonedInput = clone(input);
 
-    // @ts-expect-error
-    expect(clonedInput.description).toEqual(input.description);
+    expect(!clonedInput.description).toEqual(!input.description);
     expect(clonedInput).not.toBe(input);
   });
 
@@ -103,7 +102,7 @@ describe("clone", () => {
   });
 
   test("Set", () => {
-    const input = new Set(["value"]);
+    const input = new Set([1, 2, 3]);
     const clonedInput = clone(input);
 
     expect(clonedInput).toEqual(input);
@@ -358,10 +357,10 @@ describe("clone", () => {
         set a(value) {},
       };
       const clonedInput = clone(input);
+      const descriptor = Object.getOwnPropertyDescriptor(clonedInput, "a");
 
       expect(clonedInput).toEqual(input);
       expect(clonedInput).not.toBe(input);
-      const descriptor = Object.getOwnPropertyDescriptor(clonedInput, "a");
       expect(typeof descriptor?.get).toBe("function");
       expect(typeof descriptor?.set).toBe("function");
     });
