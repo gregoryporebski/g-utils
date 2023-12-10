@@ -42,8 +42,9 @@
     "npm-run-all": "latest",
     "prettier": "latest",
     "semantic-release": "latest",
-    "typedoc": "latest",
     "typedoc-plugin-markdown": "latest",
+    "typedoc": "latest",
+    "typesafe-utils": "latest",
     "typescript": "latest"
   }
 }
