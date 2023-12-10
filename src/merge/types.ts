@@ -1,4 +1,4 @@
-import { Prettify } from "@/types";
+import { NonPrimitiveObject, Prettify } from "@/types";
 
 /**
  * Represents the strategy for merging common values.
@@ -169,18 +169,6 @@ export type MergeOptions = {
    */
   undefined?: MergeCommonStrategy | MergeStrategyFunction;
 };
-
-export type NonPrimitiveObject =
-  | Array<any>
-  | Function
-  | Date
-  | RegExp
-  | Map<any, any>
-  | Set<any>
-  | Promise<any>
-  | Error
-  | Buffer
-  | ArrayBuffer;
 
 /**
  * Represents the result of merging multiple primitive objects .
