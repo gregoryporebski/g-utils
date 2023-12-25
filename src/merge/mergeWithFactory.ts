@@ -3,7 +3,7 @@ import type { MergeFactory } from "./types";
 
 const mergeWithFactory: MergeFactory =
   (options) =>
-  <Objects extends any[]>(...objects: Objects) =>
+  (...objects) =>
     mergeWith(options, ...objects);
 
 export default mergeWithFactory;
