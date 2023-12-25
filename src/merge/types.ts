@@ -1,4 +1,4 @@
-import { NonPrimitiveObject, Prettify } from "@/types";
+import { NonPrimitiveObject, Prettify, PropertySelector } from "@/types";
 
 /**
  * Represents the strategy for merging common values.
@@ -30,13 +30,11 @@ export type MergeStrategy =
     >
   | MergeStrategyFunction;
 
-export type MergeSelector = (key: keyof any, value: any) => boolean;
-
 /**
  * Represents a custom merge strategy for merging objects.
  */
 export type MergeCustomStrategy = {
-  selector: MergeSelector;
+  selector: PropertySelector;
   strategy: MergeStrategy;
 };
 
@@ -49,7 +47,7 @@ export type MergeResolverFactory = (
 export type MergeSelectorFactory = (
   key: keyof any,
   value: any
-) => (selectors: MergeSelector[]) => boolean;
+) => (selectors: PropertySelector[]) => boolean;
 
 /**
  * Options for merging objects using the merge utility.
@@ -130,12 +128,12 @@ export type MergeOptions = {
   /**
    * Select properties to omit from the merge.
    */
-  omit?: MergeSelector[];
+  omit?: PropertySelector[];
 
   /**
    * Select properties to pick from the merge.
    */
-  pick?: MergeSelector[];
+  pick?: PropertySelector[];
 
   /**
    * Factory function for creating a merge resolver.

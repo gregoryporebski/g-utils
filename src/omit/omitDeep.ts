@@ -1,9 +1,10 @@
-import { mergeDeepWith } from "@/merge";
-import { OmitOptions, OmitResult } from "./types";
+import { PropertySelector } from "@/types";
+import { omitDeepWith } from ".";
+import { OmitResult } from "./types";
 
 export default function omitDeep<OmitInput extends object>(
-  options: OmitOptions,
-  object: OmitInput
+  object: OmitInput,
+  ...selectors: PropertySelector[]
 ): OmitResult<OmitInput> {
-  return mergeDeepWith({ omit: options }, {}, object);
+  return omitDeepWith({ selectors }, object);
 }

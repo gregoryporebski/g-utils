@@ -30,3 +30,7 @@ export type NonPrimitiveObject =
   | Float64Array
   | BigInt64Array
   | BigUint64Array;
+
+export type PropertySelectorFunction = (key: keyof any, value: any) => boolean;
+
+export type PropertySelector = keyof any | PropertySelectorFunction;
