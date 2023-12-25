@@ -1,9 +1,10 @@
-import { mergeWith } from "@/merge";
-import { PickOptions, PickResult } from "./types";
+import { PropertySelector } from "@/types";
+import { pickWith } from ".";
+import { PickResult } from "./types";
 
 export default function pick<PickInput extends object>(
-  options: PickOptions,
-  object: PickInput
+  object: PickInput,
+  ...selectors: PropertySelector[]
 ): PickResult<PickInput> {
-  return mergeWith({ pick: options }, {}, object);
+  return pickWith({ selectors }, object);
 }
