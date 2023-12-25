@@ -3,7 +3,11 @@ import { MergeSelectorFactory } from "../types";
 const mergeSelectorFactory: MergeSelectorFactory =
   (key, value) => (selectors) => {
     return selectors.some((selector) => {
-      return selector(key, value);
+      if (typeof selector === "function") {
+        return selector(key, value);
+      }
+
+      return selector === key;
     });
   };
 

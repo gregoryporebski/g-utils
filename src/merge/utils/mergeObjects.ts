@@ -26,10 +26,15 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
 
     if (
       options?.custom?.some((custom) => {
-        if (custom.selector(key, b[key])) {
+        if (
+          typeof custom.selector === "function" &&
+          custom.selector(key, b[key])
+        ) {
           Object.defineProperty(a, ...resolver(custom.strategy));
           return true;
         }
+
+        return custom.selector === key;
       })
     ) {
       return;
