@@ -1,9 +1,10 @@
-import { mergeDeepWith } from "@/merge";
-import { PickOptions, PickResult } from "./types";
+import { PropertySelector } from "@/types";
+import { pickDeepWith } from ".";
+import { PickResult } from "./types";
 
 export default function pickDeep<PickInput extends object>(
-  options: PickOptions,
-  object: PickInput
+  object: PickInput,
+  ...selectors: PropertySelector[]
 ): PickResult<PickInput> {
-  return mergeDeepWith({ pick: options }, {}, object);
+  return pickDeepWith({ selectors }, object);
 }
