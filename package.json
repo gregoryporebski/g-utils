@@ -29,6 +29,7 @@
     "build": "run-s clean build:*",
     "build:module": "bun build.ts",
     "build:types": "tsc -p tsconfig.build.json",
+    "build:type-aliases": "tsc-alias -p tsconfig.build.json",
     "clean": "rm -rf lib doc",
     "doc": "typedoc src --out doc --plugin @mxssfd/typedoc-theme --theme my-theme"
   },
@@ -42,8 +43,9 @@
     "npm-run-all": "latest",
     "prettier": "latest",
     "semantic-release": "latest",
-    "typedoc-plugin-markdown": "latest",
+    "tsc-alias": "latest",
     "typedoc": "latest",
+    "typedoc-plugin-markdown": "latest",
     "typesafe-utils": "latest",
     "typescript": "latest"
   }
