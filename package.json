@@ -26,12 +26,15 @@
     "/lib"
   ],
   "scripts": {
-    "build": "run-s clean build:*",
+    "build": "run-s clean:lib build:*",
     "build:module": "bun build.ts",
     "build:types": "tsc -p tsconfig.build.json",
     "build:type-aliases": "tsc-alias -p tsconfig.build.json",
-    "clean": "rm -rf lib doc",
-    "doc": "typedoc src --out doc --plugin @mxssfd/typedoc-theme --theme my-theme"
+    "clean": "run-p clean:*",
+    "clean:lib": "rm -rf lib",
+    "clean:doc": "rm -rf doc",
+    "doc": "run-s clean:doc doc:*",
+    "doc:generate": "typedoc --options typedoc.config.js"
   },
   "devDependencies": {
     "@mxssfd/typedoc-theme": "latest",

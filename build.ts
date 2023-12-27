@@ -1,9 +1,11 @@
 import fs from "fs";
 import config from "./package.json";
 
-const modules = ["clone", "merge", "omit", "pick"];
+const path = import.meta.dir + "/lib";
 
-await Bun.build({
+const modules = ["clone", "merge", "omit", "pick", "type-guards"];
+
+const build = await Bun.build({
   entrypoints: [
     "./src/index.ts",
     ...modules.map((module) => `./src/${module}/index.ts`),
@@ -14,6 +16,10 @@ await Bun.build({
   sourcemap: "none",
   minify: true,
 });
+
+if (!build.success) {
+  throw new Error(`Build failed: ${build.logs}`);
+}
 
 const buildPackage = {
   name: config.name,
@@ -29,7 +35,7 @@ const buildPackage = {
 };
 
 fs.writeFileSync(
-  import.meta.dir + "/lib/package.json",
+  path + "/package.json",
   JSON.stringify(buildPackage, null, 2),
   {
     encoding: "utf-8",
