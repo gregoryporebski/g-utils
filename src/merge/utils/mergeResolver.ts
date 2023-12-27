@@ -1,4 +1,4 @@
-import { isNonArrayObject } from "@/utils/typeGuards";
+import { isMap, isNonArrayObject, isSet } from "@/type-guards";
 import { isPrimitiveObject, isUndefined } from "typesafe-utils";
 import { concatFunctions } from "../resolvers/concatFunctions";
 import { concatObjects } from "../resolvers/concatObjects";
@@ -53,13 +53,13 @@ const mergeResolverFactory: MergeResolverFactory =
           });
         }
 
-        if (a[key] instanceof Set && b[key] instanceof Set) {
+        if (isSet(a[key]) && isSet(b[key])) {
           return getResultWith(b, key, {
             value: new Set([...a[key], ...b[key]]),
           });
         }
 
-        if (a[key] instanceof Map && b[key] instanceof Map) {
+        if (isMap(a[key]) && isMap(b[key])) {
           return getResultWith(b, key, {
             value: new Map([...a[key], ...b[key]]),
           });

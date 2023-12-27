@@ -1,4 +1,12 @@
 import { mergeWith } from "@/merge";
+import {
+  isArrayBuffer,
+  isDataView,
+  isPromise,
+  isSharedArrayBuffer,
+  isWeakMap,
+  isWeakSet,
+} from "@/type-guards";
 import { isNull, isObject, isPrimitiveObject } from "typesafe-utils";
 import { CloneOptions } from "./types";
 
@@ -16,11 +24,11 @@ export default function cloneWith<CloneInput>(
     case isPrimitiveObject(input):
       return mergeWith(options, input) as CloneInput;
 
-    case input instanceof Promise:
+    case isPromise(input):
       return input.then() as CloneInput;
 
-    case input instanceof WeakMap:
-    case input instanceof WeakSet:
+    case isWeakMap(input):
+    case isWeakSet(input):
       if (options.debug) {
         console.warn(
           `Cannot clone ${input.constructor.name} objects. Returning original object.`
@@ -28,11 +36,11 @@ export default function cloneWith<CloneInput>(
       }
       return input;
 
-    case input instanceof ArrayBuffer:
-    case input instanceof SharedArrayBuffer:
+    case isArrayBuffer(input):
+    case isSharedArrayBuffer(input):
       return input.slice(0) as CloneInput;
 
-    case input instanceof DataView:
+    case isDataView(input):
       return new DataView(
         cloneWith(options, input.buffer),
         input.byteOffset,
