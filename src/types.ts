@@ -1,7 +1,18 @@
+/**
+ * Represents a type that prettifies another type by preserving its keys and adding an empty object.
+ */
 export type Prettify<T> = {
   [K in keyof T]: T[K];
 } & {};
 
+/**
+ * Represents the key of any object, so `string`, `number` or `Symbol`.
+ */
+export type Key = keyof any;
+
+/**
+ * Represents a non-primitive object that can be merged.
+ */
 export type NonPrimitiveObject =
   | Array<any>
   | Function
@@ -31,6 +42,16 @@ export type NonPrimitiveObject =
   | BigInt64Array
   | BigUint64Array;
 
-export type PropertySelectorFunction = (key: keyof any, value: any) => boolean;
+/**
+ * Represents a function that selects properties to merge.
+ *
+ * @param key - The key of the property being merged.
+ * @param value - The value of the property being merged.
+ * @returns `true` if the property should be merged, `false` otherwise.
+ */
+export type PropertySelectorFunction = (key: Key, value: any) => boolean;
 
-export type PropertySelector = keyof any | PropertySelectorFunction;
+/**
+ * Represents a property selector for selecting properties to merge.
+ */
+export type PropertySelector = Key | PropertySelectorFunction;

@@ -3,7 +3,8 @@ import type { MergeOptions, MergeResult } from "./types";
 import mergeObjects from "./utils/mergeObjects";
 
 /**
- * Merges multiple objects with customizable options.
+ * Merges multiple objects into a single object with customizable options.
+ * @group merge
  *
  * @param options The merge options.
  * @param objects The objects to merge.

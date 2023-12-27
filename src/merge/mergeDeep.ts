@@ -2,7 +2,8 @@ import mergeWith from "./mergeWith";
 import type { MergeResult } from "./types";
 
 /**
- * Merges deeply multiple objects into a single object
+ * Merges deeply multiple objects into a single object.
+ * @group merge
  *
  * @param objects The objects to merge.
  * @returns The merged object.

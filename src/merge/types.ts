@@ -2,17 +2,24 @@ import { NonPrimitiveObject, Prettify, PropertySelector } from "@/types";
 
 /**
  * Represents the strategy for merging common values.
- * - "replace": Replaces the existing value with the new value.
- * - "keep": Keeps the existing value and ignores the new value.
+ *
+ * `replace` - Replaces the existing value with the new value.
+ *
+ * `keep` - Keeps the existing value and ignores the new value.
+ *
+ * @group merge
  */
 export type MergeCommonStrategy = "replace" | "keep";
 
 /**
  * Represents a function that defines the merge strategy for merging two values.
+ *
  * @param a - The first value to be merged.
  * @param b - The second value to be merged.
  * @param key - The key indicating the property being merged.
  * @returns The merged value.
+ *
+ * @group merge
  */
 export type MergeStrategyFunction = (a: any, b: any, key: keyof any) => any;
 
@@ -32,12 +39,19 @@ export type MergeStrategy =
 
 /**
  * Represents a custom merge strategy for merging objects.
+ *
+ * @group merge
  */
 export type MergeCustomStrategy = {
   selector: PropertySelector;
   strategy: MergeStrategy;
 };
 
+/**
+ * Factory function for creating a merge resolver.
+ *
+ * @group merge
+ */
 export type MergeResolverFactory = (
   a: any,
   b: any,
@@ -57,6 +71,7 @@ export type MergeOptions = {
   /**
    * Strategy for merging arrays.
    * @default `concat`
+   *
    * @example
    * mergeWith({ array: "replace" }, { a: [1, 2] }, { a: [3, 4] }); // { a: [3, 4] }
    * mergeWith({ array: "keep" }, { a: [1, 2] }, { a: [3, 4] }); // { a: [1, 2] }
@@ -169,10 +184,12 @@ export type MergeOptions = {
 };
 
 /**
- * Represents the result of merging multiple primitive objects .
- * @template MergeInput - Primitive objects to be merged.
- * @returns Union type representing the possible merge results.
+ * Represents the result of merging multiple objects.
  * @group merge
+ *
+ * @typeParam MergeInput - Objects to be merged.
+ * @returns Union type representing the possible merge results.
+ *
  * @example
  * MergeResult<{ a: string }, { b: number }>; // { a: string } | { b: number }
  * MergeResult<string, { b: number }>; // { b: number }
