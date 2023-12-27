@@ -1,4 +1,4 @@
-import { NonPrimitiveObject, Prettify, PropertySelector } from "@/types";
+import { Key, NonPrimitiveObject, Prettify, PropertySelector } from "@/types";
 
 /**
  * Represents the strategy for merging common values.
@@ -21,7 +21,7 @@ export type MergeCommonStrategy = "replace" | "keep";
  *
  * @group merge
  */
-export type MergeStrategyFunction = (a: any, b: any, key: keyof any) => any;
+export type MergeStrategyFunction = (a: any, b: any, key: Key) => any;
 
 export type MergeStrategy =
   | Exclude<
@@ -55,11 +55,11 @@ export type MergeCustomStrategy = {
 export type MergeResolverFactory = (
   a: any,
   b: any,
-  key: keyof any
-) => (strategy?: MergeStrategy) => [keyof any, PropertyDescriptor];
+  key: Key
+) => (strategy?: MergeStrategy) => [Key, PropertyDescriptor];
 
 export type MergeSelectorFactory = (
-  key: keyof any,
+  key: Key,
   value: any
 ) => (selectors: PropertySelector[]) => boolean;
 

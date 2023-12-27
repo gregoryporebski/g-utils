@@ -1,18 +1,16 @@
 import { isMap, isNonArrayObject, isSet } from "@/type-guards";
+import { Key } from "@/types";
 import { isPrimitiveObject, isUndefined } from "typesafe-utils";
 import { concatFunctions } from "../resolvers/concatFunctions";
 import { concatObjects } from "../resolvers/concatObjects";
 import { MergeResolverFactory } from "../types";
 
-const getDescriptor = (object: any, key: keyof any) =>
+const getDescriptor = (object: any, key: Key) =>
   Object.getOwnPropertyDescriptor(object, key);
 
-const getResult = (object: any, key: keyof any) => [
-  key,
-  getDescriptor(object, key),
-];
+const getResult = (object: any, key: Key) => [key, getDescriptor(object, key)];
 
-const getResultWith = (object: any, key: keyof any, modifier: any) => [
+const getResultWith = (object: any, key: Key, modifier: any) => [
   key,
   { ...getDescriptor(object, key), ...modifier },
 ];
