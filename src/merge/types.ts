@@ -61,7 +61,7 @@ export type MergeResolverFactory = (
 export type MergeSelectorFactory = (
   key: Key,
   value: any
-) => (selectors: PropertySelector[]) => boolean;
+) => (...selectors: PropertySelector[]) => boolean;
 
 /**
  * Options for merging objects using the merge utility.

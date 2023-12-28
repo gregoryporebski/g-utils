@@ -54,4 +54,9 @@ export type PropertySelectorFunction = (key: Key, value: any) => boolean;
 /**
  * Represents a property selector for selecting properties to merge.
  */
-export type PropertySelector = Key | PropertySelectorFunction;
+export type PropertySelector =
+  | Key
+  | PropertySelectorFunction
+  | PropertySelector[]
+  | Set<PropertySelector>
+  | Map<Key, any>;

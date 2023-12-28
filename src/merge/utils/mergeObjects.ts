@@ -20,7 +20,7 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
       return;
     }
 
-    if (options.pick && selector(options.pick) && !isDeepSelector) {
+    if (options.omit && selector(options.omit) && !isDeepSelector) {
       return;
     }
 
@@ -34,7 +34,7 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
           return true;
         }
 
-        return custom.selector === key;
+        return custom.selector == key;
       })
     ) {
       return;
