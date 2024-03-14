@@ -1,0 +1,45 @@
+{
+  "author": {
+    "name": "Grzegorz Porębski",
+    "email": "gregory.porebski@gmail.com"
+  },
+  "description": "Generic, type safe and lightweight utilities for TypeScript",
+  "keywords": [
+    "typescript",
+    "utils",
+    "generic",
+    "type-safe",
+    "lightweight",
+    "functional"
+  ],
+  "license": "GNU GPLv3",
+  "main": "./index.js",
+  "name": "@gregoryporebski/g-utils",
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+        }
+      ],
+      "@semantic-release/github"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gregoryporebski/g-utils.git"
+  },
+  "type": "module",
+  "types": "./index.d.ts",
+  "version": "1.7.2"
+}
