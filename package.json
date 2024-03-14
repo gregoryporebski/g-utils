@@ -59,6 +59,7 @@
   "devDependencies": {
     "@mxssfd/typedoc-theme": "latest",
     "@semantic-release/commit-analyzer": "latest",
+    "@semantic-release/git": "latest",
     "@semantic-release/github": "latest",
     "@semantic-release/npm": "latest",
     "@semantic-release/release-notes-generator": "latest",
