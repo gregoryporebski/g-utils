@@ -22,16 +22,17 @@ if (!build.success) {
 }
 
 const buildPackage = {
-  name: config.name,
-  version: config.version,
-  description: config.description,
-  license: config.license,
   author: config.author,
-  repository: config.repository,
-  main: "./index.js",
-  types: "./index.d.ts",
-  type: "module",
+  description: config.description,
   keywords: config.keywords,
+  license: config.license,
+  main: "./index.js",
+  name: config.name,
+  release: config.release,
+  repository: config.repository,
+  type: "module",
+  types: "./index.d.ts",
+  version: config.version,
 };
 
 fs.writeFileSync(
