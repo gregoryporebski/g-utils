@@ -5,17 +5,24 @@ import { concatFunctions } from "../resolvers/concatFunctions";
 import { concatObjects } from "../resolvers/concatObjects";
 import { MergeResolverFactory } from "../types";
 
-const getDescriptor = (object: any, key: Key) =>
-  Object.getOwnPropertyDescriptor(object, key);
+const getDescriptor = (object: any, key: Key): PropertyDescriptor =>
+  Object.getOwnPropertyDescriptor(object, key) ?? {};
 
-const getResult = (object: any, key: Key) => [key, getDescriptor(object, key)];
+const getResult = (object: any, key: Key): [keyof any, PropertyDescriptor] => [
+  key,
+  getDescriptor(object, key),
+];
 
-const getResultWith = (object: any, key: Key, modifier: any) => [
+const getResultWith = (
+  object: any,
+  key: Key,
+  modifier: any
+): [keyof any, PropertyDescriptor] => [
   key,
   { ...getDescriptor(object, key), ...modifier },
 ];
 
-const mergeResolverFactory: MergeResolverFactory =
+export const mergeResolverFactory: MergeResolverFactory =
   (a, b, key) => (strategy) => {
     if (strategy === "replace" || isUndefined(strategy)) {
       return getResult(b, key);
@@ -84,8 +91,11 @@ const mergeResolverFactory: MergeResolverFactory =
     }
 
     if (typeof strategy === "function") {
-      return strategy(a[key], b[key], key);
+      const value = strategy(a[key], b[key], key);
+      return getResultWith(b, key, { value });
     }
+
+    return [b, {}];
   };
 
 export default mergeResolverFactory;

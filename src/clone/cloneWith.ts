@@ -7,7 +7,7 @@ import {
   isWeakMap,
   isWeakSet,
 } from "@/type-guards";
-import { isError } from "@/type-guards/buffer";
+import { isError } from "@/type-guards/object";
 import { isNull, isObject, isPrimitiveObject } from "typesafe-utils";
 import { CloneOptions } from "./types";
 

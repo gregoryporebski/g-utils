@@ -24,19 +24,22 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
       return;
     }
 
-    if (
-      options?.custom?.some((custom) => {
-        if (
-          typeof custom.selector === "function" &&
-          custom.selector(key, b[key])
-        ) {
-          Object.defineProperty(a, ...resolver(custom.strategy));
-          return true;
-        }
+    if (typeof a[key] === "undefined") {
+      Object.defineProperty(a, ...resolver(options.undefined));
+      return;
+    }
 
-        return custom.selector == key;
-      })
-    ) {
+    const custom = options.custom?.find((custom) => {
+      if (typeof custom.selector === "function") {
+        return custom.selector(key, b[key]);
+      }
+
+      return custom.selector === key;
+    });
+
+    if (custom) {
+      console.log({ custom, a, key, resolver: resolver(custom.strategy) });
+      Object.defineProperty(a, ...resolver(custom.strategy));
       return;
     }
 
