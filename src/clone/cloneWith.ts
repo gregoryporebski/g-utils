@@ -7,6 +7,7 @@ import {
   isWeakMap,
   isWeakSet,
 } from "@/type-guards";
+import { isError } from "@/type-guards/buffer";
 import { isNull, isObject, isPrimitiveObject } from "typesafe-utils";
 import { CloneOptions } from "./types";
 
@@ -46,6 +47,9 @@ export default function cloneWith<CloneInput>(
         input.byteOffset,
         input.byteLength
       ) as CloneInput;
+
+    case isError(input):
+      return structuredClone(input) as CloneInput;
 
     case isObject(input):
       // @ts-expect-error
