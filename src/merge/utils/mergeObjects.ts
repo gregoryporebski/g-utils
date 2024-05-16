@@ -38,7 +38,6 @@ export default function mergeObjects(options: MergeOptions, a: any, b: any) {
     });
 
     if (custom) {
-      console.log({ custom, a, key, resolver: resolver(custom.strategy) });
       Object.defineProperty(a, ...resolver(custom.strategy));
       return;
     }
